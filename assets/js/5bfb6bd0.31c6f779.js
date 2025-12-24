@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpartify_usa=globalThis.webpackChunkpartify_usa||[]).push([[22],{2953(a){a.exports=JSON.parse('{"metadata":{"permalink":"/partify-theme-docs/blog","page":1,"postsPerPage":10,"totalPages":1,"totalCount":4,"blogDescription":"Blog","blogTitle":"Blog"}}')}}]);
