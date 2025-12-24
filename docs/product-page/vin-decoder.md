@@ -6,7 +6,7 @@ sidebar_position: 1
 
 ## Overview
 
-The VIN decoder input box system handles two distinct user flows for entering Vehicle Identification Numbers (VINs) on product pages. The system uses a single reusable snippet (`vin-decoder-input-box.liquid`) that creates independent instances with unique IDs to support multiple VIN entry points on the same page.
+The VIN decoder input box system handles two distinct user flows for entering VINs on product pages. The system uses a single reusable snippet (`vin-decoder-input-box.liquid`) that creates independent instances with unique IDs to support multiple VIN entry points on the same page.
 
 ---
 
