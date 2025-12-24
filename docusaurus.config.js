@@ -21,15 +21,18 @@ const config = {
 	},
 
 	// Set the production url of your site here
-	url: "https://partify-usa-docs.example.com",
+	url: "https://Partify-USA.github.io",
 	// Set the /<baseUrl>/ pathname under which your site is served
 	// For GitHub pages deployment, it is often '/<projectName>/'
 	baseUrl: "/",
 
 	// GitHub pages deployment config.
 	// If you aren't using GitHub pages, you don't need these.
-	organizationName: "partify", // Usually your GitHub org/user name.
-	projectName: "partify-usa-docs", // Usually your repo name.
+	organizationName: "Partify-USA", // Usually your GitHub org/user name.
+	projectName: "partify-theme-docs", // Usually your repo name.
+
+	deploymentBranch: "gh-pages",
+	trailingSlash: false,
 
 	onBrokenLinks: "throw",
 
@@ -49,7 +52,7 @@ const config = {
 				docs: {
 					sidebarPath: "./sidebars.js",
 					// Remove this to remove the "edit this page" links.
-					editUrl: "https://github.com/partify/partify-usa-docs/tree/main/",
+					editUrl: "https://github.com/partify/partify-theme-docs/tree/main/",
 				},
 				blog: {
 					showReadingTime: true,
@@ -59,7 +62,7 @@ const config = {
 					},
 					// Please change this to your repo.
 					// Remove this to remove the "edit this page" links.
-					editUrl: "https://github.com/partify/partify-usa-docs/tree/main",
+					editUrl: "https://github.com/partify/partify-theme-docs/tree/main",
 					onInlineTags: "warn",
 					onInlineAuthors: "warn",
 					onUntruncatedBlogPosts: "warn",
@@ -93,7 +96,7 @@ const config = {
 						label: "Documentation",
 					},
 					{
-						href: "https://github.com/partify/partify-usa-docs",
+						href: "https://github.com/partify/partify-theme-docs",
 						label: "GitHub",
 						position: "right",
 					},
@@ -116,7 +119,7 @@ const config = {
 						items: [
 							{
 								label: "GitHub",
-								href: "https://github.com/partify/partify-usa-docs",
+								href: "https://github.com/partify/partify-theme-docs",
 							},
 						],
 					},
