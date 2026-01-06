@@ -490,7 +490,7 @@ window.initQualityAutoSelection = () => {};
 
 - [VIN Decoder Input Box](./vin-decoder.md)
 - [Add to Cart Quality Re-enable](./add-to-cart-quality-reenable.md)
-- [Product Variants Data Structure](../../partify-theme/snippets/product-page-paint-options.liquid)
+- Product Variants Data Structure: `snippets/product-page-paint-options.liquid`
 
 ---
 

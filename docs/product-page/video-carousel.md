@@ -23,7 +23,7 @@ Videos can be added in two locations:
 
 **Add to schema:**
 
-- Open [sections/product-video-carousel.liquid](./sections/product-video-carousel.liquid)
+- Open `sections/product-video-carousel.liquid`
 - In the `{% schema %}` section at the bottom, add two new fields:
 
 ```json
