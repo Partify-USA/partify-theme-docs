@@ -17,13 +17,17 @@ The Auto-Select Quality feature automatically selects the appropriate quality op
 ### Primary Selection Logic (Priority Order)
 
 #### 1. Product URL Detection (Highest Priority)
+
 When a user clicks on a specific quality product from the collection listing:
+
 - **Aftermarket product** → Auto-select Aftermarket radio
-- **CAPA product** → Auto-select CAPA radio  
+- **CAPA product** → Auto-select CAPA radio
 - **OEM product** → Auto-select OEM radio
 
 #### 2. Single In-Stock Detection (Fallback)
+
 When exactly one quality has available inventory:
+
 - Count all qualities with `hasExtraInventory = true` or `variantInventory > 0`
 - If count equals exactly 1 → Auto-select that quality
 - If count is 0 or 2+ → No auto-selection (user must choose)
@@ -31,6 +35,7 @@ When exactly one quality has available inventory:
 ### User Selection Protection
 
 The system respects explicit user choices:
+
 - ✅ Once user clicks any quality radio, auto-selection is disabled
 - ✅ `userSelectedQuality` flag prevents future auto-selections
 - ⚠️ **Exception:** If user's selection becomes unavailable AND exactly one other quality is available, the system may auto-switch
@@ -42,6 +47,7 @@ The system respects explicit user choices:
 ### Files Modified
 
 #### 1. `assets/product-page-component-library.js`
+
 **Lines:** ~183-340
 
 Added core auto-selection functions:
@@ -51,38 +57,47 @@ Added core auto-selection functions:
 let userSelectedQuality = false;
 
 // Get list of qualities with inventory
-function getInStockQualities() { /* ... */ }
+function getInStockQualities() {
+	/* ... */
+}
 
 // Perform auto-selection based on URL and/or inventory
-function autoSelectSingleInStockQuality() { /* ... */ }
+function autoSelectSingleInStockQuality() {
+	/* ... */
+}
 
 // Set up click tracking to detect user selections
-function initQualityAutoSelection() { /* ... */ }
+function initQualityAutoSelection() {
+	/* ... */
+}
 
 // Re-evaluate after state changes
-function reevaluateQualityAutoSelection() { /* ... */ }
+function reevaluateQualityAutoSelection() {
+	/* ... */
+}
 ```
 
 #### 2. `snippets/quality-options-radio-btns.liquid`
+
 **Lines:** ~439-443
 
 Integration point on page load:
 
 ```javascript
-document.addEventListener('DOMContentLoaded', async function () {
-  // ... existing code ...
-  
-  // Initialize quality auto-selection tracking
-  if (typeof initQualityAutoSelection === 'function') {
-    initQualityAutoSelection();
-  }
+document.addEventListener("DOMContentLoaded", async function () {
+	// ... existing code ...
 
-  // Attempt auto-selection after 100ms delay
-  setTimeout(() => {
-    if (typeof autoSelectSingleInStockQuality === 'function') {
-      autoSelectSingleInStockQuality();
-    }
-  }, 100);
+	// Initialize quality auto-selection tracking
+	if (typeof initQualityAutoSelection === "function") {
+		initQualityAutoSelection();
+	}
+
+	// Attempt auto-selection after 100ms delay
+	setTimeout(() => {
+		if (typeof autoSelectSingleInStockQuality === "function") {
+			autoSelectSingleInStockQuality();
+		}
+	}, 100);
 });
 ```
 
@@ -114,23 +129,21 @@ graph TD
 
 ```javascript
 // Step 1: Extract current product info
-const currentProductHandle = window.location.pathname.split('/').pop();
+const currentProductHandle = window.location.pathname.split("/").pop();
 const currentProductId = window.currentProductId;
 
 // Step 2: Check each quality (stops at first match)
-for (let qualityType of ['aftermarket', 'capa', 'oem']) {
-  const qualityVariants = window.productVariants[qualityType];
-  
-  // Check multiple conditions (priority order):
-  if (currentProductId === qualityVariants[0].id) {
-    return qualityType; // ✓ Variant ID match (most reliable)
-  }
-  else if (currentProductHandle === productHandle) {
-    return qualityType; // ✓ Exact handle match
-  }
-  else if (productTitle.includes(` ${qualityType} `)) {
-    return qualityType; // ✓ Quality keyword in title (with spaces)
-  }
+for (let qualityType of ["aftermarket", "capa", "oem"]) {
+	const qualityVariants = window.productVariants[qualityType];
+
+	// Check multiple conditions (priority order):
+	if (currentProductId === qualityVariants[0].id) {
+		return qualityType; // ✓ Variant ID match (most reliable)
+	} else if (currentProductHandle === productHandle) {
+		return qualityType; // ✓ Exact handle match
+	} else if (productTitle.includes(` ${qualityType} `)) {
+		return qualityType; // ✓ Quality keyword in title (with spaces)
+	}
 }
 ```
 
@@ -138,19 +151,21 @@ for (let qualityType of ['aftermarket', 'capa', 'oem']) {
 
 ```javascript
 function getInStockQualities() {
-  const inStock = [];
-  
-  ['aftermarket', 'capa', 'oem'].forEach(qualityType => {
-    const hasStock = productVariants[qualityType].some(variant => {
-      return variant.hasExtraInventory === true ||
-             (variant.extraInventory && parseInt(variant.extraInventory) > 0) ||
-             (variant.variantInventory && parseInt(variant.variantInventory) > 0);
-    });
-    
-    if (hasStock) inStock.push(qualityType);
-  });
-  
-  return inStock; // e.g., ['capa'] or ['aftermarket', 'capa']
+	const inStock = [];
+
+	["aftermarket", "capa", "oem"].forEach((qualityType) => {
+		const hasStock = productVariants[qualityType].some((variant) => {
+			return (
+				variant.hasExtraInventory === true ||
+				(variant.extraInventory && parseInt(variant.extraInventory) > 0) ||
+				(variant.variantInventory && parseInt(variant.variantInventory) > 0)
+			);
+		});
+
+		if (hasStock) inStock.push(qualityType);
+	});
+
+	return inStock; // e.g., ['capa'] or ['aftermarket', 'capa']
 }
 ```
 
@@ -186,14 +201,14 @@ Populated by `snippets/product-page-paint-options.liquid` at line ~1196:
 ### Quality Radio Button Structure
 
 ```html
-<input 
-  type="radio" 
-  name="quality_type" 
-  value="aftermarket"
-  data-quality-sku="HY1000188"
-  data-price="$104.99"
-  data-available="true"
->
+<input
+	type="radio"
+	name="quality_type"
+	value="aftermarket"
+	data-quality-sku="HY1000188"
+	data-price="$104.99"
+	data-available="true"
+/>
 ```
 
 **Rendered by:** `snippets/quality-options-radio-btns.liquid`  
@@ -240,32 +255,32 @@ All logs are prefixed with `[Auto-Select]` for easy filtering.
 
 ### Test Case 1: Product URL Detection
 
-| Scenario | User Action | Expected Result |
-|----------|-------------|-----------------|
-| 1A | Click Aftermarket from collection | Aftermarket auto-selected |
-| 1B | Click CAPA from collection | CAPA auto-selected |
-| 1C | Click OEM from collection | OEM auto-selected |
+| Scenario | User Action                       | Expected Result           |
+| -------- | --------------------------------- | ------------------------- |
+| 1A       | Click Aftermarket from collection | Aftermarket auto-selected |
+| 1B       | Click CAPA from collection        | CAPA auto-selected        |
+| 1C       | Click OEM from collection         | OEM auto-selected         |
 
 ### Test Case 2: Inventory-Based Selection
 
-| Scenario | Stock Status | Expected Result |
-|----------|--------------|-----------------|
-| 2A | Only CAPA in stock | CAPA auto-selected |
-| 2B | Aftermarket + CAPA in stock | No auto-select (user chooses) |
-| 2C | All out of stock | No auto-select |
+| Scenario | Stock Status                | Expected Result               |
+| -------- | --------------------------- | ----------------------------- |
+| 2A       | Only CAPA in stock          | CAPA auto-selected            |
+| 2B       | Aftermarket + CAPA in stock | No auto-select (user chooses) |
+| 2C       | All out of stock            | No auto-select                |
 
 ### Test Case 3: User Override Protection
 
-| Scenario | Steps | Expected Result |
-|----------|-------|-----------------|
-| 3A | Auto-select CAPA → User clicks Aftermarket | Stays on Aftermarket |
-| 3B | User selects quality → Change paint option | Quality unchanged |
+| Scenario | Steps                                      | Expected Result      |
+| -------- | ------------------------------------------ | -------------------- |
+| 3A       | Auto-select CAPA → User clicks Aftermarket | Stays on Aftermarket |
+| 3B       | User selects quality → Change paint option | Quality unchanged    |
 
 ---
 
 ## Performance Metrics
 
-- **Execution Time:** <50ms for auto-select logic
+- **Execution Time:** Less than 50ms for auto-select logic
 - **Memory Impact:** ~1KB for function definitions
 - **Event Listeners:** +1 click listener per quality radio (typically 3)
 - **Page Load Delay:** 100ms setTimeout for productVariants population
@@ -274,16 +289,17 @@ All logs are prefixed with `[Auto-Select]` for easy filtering.
 
 ## Browser Compatibility
 
-| Browser | Version | Status |
-|---------|---------|--------|
-| Chrome | 90+ | ✅ Supported |
-| Edge | 90+ | ✅ Supported |
-| Firefox | 88+ | ✅ Supported |
-| Safari | 14+ | ✅ Supported |
-| iOS Safari | 14+ | ✅ Supported |
-| Chrome Mobile | 90+ | ✅ Supported |
+| Browser       | Version | Status       |
+| ------------- | ------- | ------------ |
+| Chrome        | 90+     | ✅ Supported |
+| Edge          | 90+     | ✅ Supported |
+| Firefox       | 88+     | ✅ Supported |
+| Safari        | 14+     | ✅ Supported |
+| iOS Safari    | 14+     | ✅ Supported |
+| Chrome Mobile | 90+     | ✅ Supported |
 
 **ES Features Used:**
+
 - Arrow functions (ES6)
 - Template literals (ES6)
 - `querySelector` (ES5)
@@ -299,6 +315,7 @@ All logs are prefixed with `[Auto-Select]` for easy filtering.
 **Symptoms:** Quality radios remain unselected on page load
 
 **Debug Steps:**
+
 1. Open Console (F12) and look for `[Auto-Select]` logs
 2. Check if `window.productVariants` is populated:
    ```javascript
@@ -311,6 +328,7 @@ All logs are prefixed with `[Auto-Select]` for easy filtering.
 4. Check timing - increase delay in `quality-options-radio-btns.liquid` if needed
 
 **Common Causes:**
+
 - `productVariants` not loaded yet (increase 100ms delay)
 - Quality radios disabled (check fitment selection required)
 - All qualities have same stock status (2+ or 0 in stock)
@@ -320,6 +338,7 @@ All logs are prefixed with `[Auto-Select]` for easy filtering.
 **Symptoms:** OEM selected when CAPA product was clicked
 
 **Debug Steps:**
+
 1. Check console for product detection logs
 2. Look for multiple matches:
    ```
@@ -335,9 +354,10 @@ All logs are prefixed with `[Auto-Select]` for easy filtering.
 **Symptoms:** User selects quality, then it switches automatically
 
 **Debug Steps:**
+
 1. Check `userSelectedQuality` flag:
    ```javascript
-   console.log('User Selected Quality:', userSelectedQuality);
+   console.log("User Selected Quality:", userSelectedQuality);
    ```
 2. Look for unexpected calls to `reevaluateQualityAutoSelection()`
 3. Check if click listener is properly attached
@@ -351,43 +371,47 @@ All logs are prefixed with `[Auto-Select]` for easy filtering.
 ### Potential Improvements
 
 #### 1. Analytics Integration
+
 ```javascript
 // Track auto-selection events
-gtag('event', 'quality_auto_selected', {
-  quality: qualityToSelect,
-  method: 'url', // or 'inventory'
-  product_handle: currentProductHandle
+gtag("event", "quality_auto_selected", {
+	quality: qualityToSelect,
+	method: "url", // or 'inventory'
+	product_handle: currentProductHandle,
 });
 ```
 
 #### 2. User Preference Persistence
+
 ```javascript
 // Remember last selected quality
-localStorage.setItem('preferredQuality', selectedQuality);
+localStorage.setItem("preferredQuality", selectedQuality);
 
 // Use on next visit as default (if available)
-const preferredQuality = localStorage.getItem('preferredQuality');
+const preferredQuality = localStorage.getItem("preferredQuality");
 ```
 
 #### 3. Multi-Language Support
+
 ```javascript
 const qualityKeywords = {
-  aftermarket: {
-    en: 'aftermarket',
-    es: 'postmercado'
-  },
-  capa: {
-    en: 'capa',
-    es: 'certificado capa'
-  }
+	aftermarket: {
+		en: "aftermarket",
+		es: "postmercado",
+	},
+	capa: {
+		en: "capa",
+		es: "certificado capa",
+	},
 };
 ```
 
 #### 4. A/B Testing Framework
+
 ```javascript
-if (experiment.variant === 'auto-select') {
-  autoSelectSingleInStockQuality();
-  trackExperimentMetric('auto_select_enabled');
+if (experiment.variant === "auto-select") {
+	autoSelectSingleInStockQuality();
+	trackExperimentMetric("auto_select_enabled");
 }
 ```
 
@@ -398,18 +422,22 @@ if (experiment.variant === 'auto-select') {
 ### Existing Features Affected
 
 ✅ **Paint Options Selection**
+
 - Auto-selected quality triggers paint variant dropdown population
 - Price displays update correctly
 
 ✅ **VIN Decoder**
+
 - VIN input field visibility depends on quality (OEM requires VIN)
 - Auto-selection properly shows/hides VIN fields
 
 ✅ **Delivery Countdown**
+
 - ETAs calculated for auto-selected quality
 - Updates correctly when user changes selection
 
 ✅ **Add to Cart**
+
 - Correct product added based on auto-selected quality
 - Cart reflects proper SKU and pricing
 
@@ -420,6 +448,7 @@ if (experiment.variant === 'auto-select') {
 ### Quick Disable (No Deploy)
 
 Add to browser console or tag manager:
+
 ```javascript
 window.autoSelectSingleInStockQuality = () => false;
 window.initQualityAutoSelection = () => {};
@@ -428,11 +457,13 @@ window.initQualityAutoSelection = () => {};
 ### Code Rollback
 
 1. Revert commit:
+
    ```bash
    git revert <commit-hash>
    ```
 
 2. Or manually remove:
+
    - Lines ~183-340 from `product-page-component-library.js`
    - Lines ~439-443 from `quality-options-radio-btns.liquid`
 
