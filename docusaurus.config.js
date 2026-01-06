@@ -110,7 +110,11 @@ const config = {
 						items: [
 							{
 								label: "Product Page",
-								to: "/docs/product-page/vin-decoder",
+								to: "/docs/pages/product-page/vin-decoder",
+							},
+							{
+								label: "Contribution Guidelines",
+								to: "/docs/contribution/documentation-rules",
 							},
 						],
 					},
