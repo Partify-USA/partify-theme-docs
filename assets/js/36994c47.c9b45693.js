@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunkpartify_usa=globalThis.webpackChunkpartify_usa||[]).push([[858],{5516(a){a.exports=JSON.parse('{"name":"docusaurus-plugin-content-blog","id":"default"}')}}]);
