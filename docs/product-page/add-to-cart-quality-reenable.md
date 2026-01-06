@@ -1,7 +1,7 @@
 ---
 id: add-to-cart-quality-reenable
 title: Add to Cart Re-enable on Quality Change
-sidebar_position: 2
+sidebar_position: 4
 ---
 
 # Add to Cart Re-enable on Quality Change
@@ -13,6 +13,7 @@ This document describes the fix for a bug where the Add to Cart button remained 
 ### Bug Summary
 
 When a product page loaded with an out-of-stock base variant:
+
 - The Add to Cart button was correctly disabled with `disabled=true` and the `disabled-oos` CSS class
 - When the user selected an in-stock quality option, the hidden variant ID input (`[name="id"]`) updated correctly
 - However, the button remained disabled because the `disabled-oos` state was never re-evaluated
@@ -50,6 +51,7 @@ When a user selected a different quality option (e.g., switching from out-of-sto
 ### Why Variant ID Updates Were Insufficient
 
 The hidden input `[name="id"]` correctly reflected the selected in-stock variant, but the form submission was blocked client-side because:
+
 - The button had `disabled=true` (preventing clicks)
 - Browser form submission ignores inputs from disabled buttons
 - No re-evaluation logic existed to sync button state with the selected variant's availability
@@ -69,6 +71,7 @@ The hidden input `[name="id"]` correctly reflected the selected in-stock variant
 ### Changes Made
 
 **Before:**
+
 ```javascript
 function enableAddToCartButton() {
 	// Never allow enabling when product is globally blocked (OOS)
@@ -83,12 +86,17 @@ function enableAddToCartButton() {
 ```
 
 **After:**
+
 ```javascript
 function enableAddToCartButton() {
 	// Check if a quality is selected and if it's available
-	const selectedQuality = document.querySelector('input[name="quality_type"]:checked');
-	const isQualityAvailable = selectedQuality ? selectedQuality.getAttribute('data-available') === 'true' : true;
-	
+	const selectedQuality = document.querySelector(
+		'input[name="quality_type"]:checked'
+	);
+	const isQualityAvailable = selectedQuality
+		? selectedQuality.getAttribute("data-available") === "true"
+		: true;
+
 	// Block if selected quality is out of stock OR if base product is blocked AND no quality selected
 	if (!isQualityAvailable || (window.blockAddToCart && !selectedQuality)) {
 		disableAddToCartButton();
@@ -97,11 +105,11 @@ function enableAddToCartButton() {
 
 	if (currentAddToCartBtnLibrary) {
 		currentAddToCartBtnLibrary.disabled = false;
-		currentAddToCartBtnLibrary.classList.remove('disabled-oos');
+		currentAddToCartBtnLibrary.classList.remove("disabled-oos");
 	}
 	if (addToCartStickyLibrary) {
 		addToCartStickyLibrary.disabled = false;
-		addToCartStickyLibrary.classList.remove('disabled-oos');
+		addToCartStickyLibrary.classList.remove("disabled-oos");
 	}
 }
 ```
@@ -109,11 +117,13 @@ function enableAddToCartButton() {
 ### Key Logic Changes
 
 1. **Quality Availability Check**
+
    - Queries the DOM for the currently selected quality radio button: `input[name="quality_type"]:checked`
    - Reads the `data-available` attribute (set by Liquid template based on product availability)
    - If no quality is selected, defaults to `true` (allows enabling for products without quality options)
 
 2. **Conditional Blocking**
+
    - Blocks if selected quality is unavailable (`!isQualityAvailable`)
    - Blocks if base product is OOS AND no quality has been selected
    - Otherwise, proceeds to enable the button
@@ -148,28 +158,31 @@ This attribute reflects the Shopify product availability for that specific quali
 
 ### Before vs After
 
-| Scenario | User Action | Before Fix | After Fix |
-|----------|-------------|------------|-----------|
-| **OOS Base → In-Stock Quality** | 1. Land on OOS Aftermarket product<br/>2. Select CAPA (in stock)<br/>3. Select paint option | Button stays disabled ❌ | Button enables after paint selection ✅ |
-| **Direct In-Stock Quality Landing** | 1. Navigate to `/products/...?variant=CAPA_ID`<br/>2. Select paint option | Button enables correctly ✅ | Button enables correctly ✅ (no change) |
-| **In-Stock Base → OOS Quality** | 1. Land on in-stock product<br/>2. Select OOS quality | Button disables correctly ✅ | Button disables correctly ✅ (no change) |
-| **Quality Switch Between In-Stock Options** | 1. Select CAPA (in stock)<br/>2. Switch to OEM (in stock) | Button stays enabled ✅ | Button stays enabled ✅ (no change) |
+| Scenario                                    | User Action                                                                                 | Before Fix                   | After Fix                                |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------- | ---------------------------- | ---------------------------------------- |
+| **OOS Base → In-Stock Quality**             | 1. Land on OOS Aftermarket product<br/>2. Select CAPA (in stock)<br/>3. Select paint option | Button stays disabled ❌     | Button enables after paint selection ✅  |
+| **Direct In-Stock Quality Landing**         | 1. Navigate to `/products/...?variant=CAPA_ID`<br/>2. Select paint option                   | Button enables correctly ✅  | Button enables correctly ✅ (no change)  |
+| **In-Stock Base → OOS Quality**             | 1. Land on in-stock product<br/>2. Select OOS quality                                       | Button disables correctly ✅ | Button disables correctly ✅ (no change) |
+| **Quality Switch Between In-Stock Options** | 1. Select CAPA (in stock)<br/>2. Switch to OEM (in stock)                                   | Button stays enabled ✅      | Button stays enabled ✅ (no change)      |
 
 ### User Flow Example (Primary Fix)
 
 **Scenario:** Customer wants to purchase an in-stock CAPA variant when Aftermarket is out of stock.
 
 1. **Page Load**
+
    - Base product: Aftermarket (Out of Stock)
    - Button state: Disabled, `disabled-oos` class present
    - `window.blockAddToCart = true`
 
 2. **Select CAPA Quality**
+
    - Quality radio button: `data-available="true"`
    - Variant ID updates to CAPA variant
    - Button remains disabled (waiting for paint option)
 
 3. **Select Paint Option (e.g., "Unpainted")**
+
    - `enableAddToCartButton()` is called
    - Function checks `data-available="true"` on CAPA radio
    - **Fix:** Function bypasses `window.blockAddToCart` check because quality is available
@@ -196,6 +209,7 @@ This fix is narrowly scoped to the quality selection availability logic. It does
 ### Unchanged Button States
 
 The button can still be disabled by:
+
 - Missing fitment verification (if required)
 - Missing VIN for OEM products
 - Unchecked paint disclaimers
@@ -210,6 +224,7 @@ The button can still be disabled by:
 ### Why `data-available` Attribute?
 
 The `data-available` attribute is the most reliable source for quality variant availability because:
+
 1. Set server-side by Liquid template based on Shopify product data
 2. Reflects real inventory status at page render time
 3. Already used throughout the quality selection UI
@@ -218,6 +233,7 @@ The `data-available` attribute is the most reliable source for quality variant a
 ### Why Not Use `window.productVariants`?
 
 While `window.productVariants` contains availability data, it is:
+
 - Structured differently for different product types (painted vs unpainted)
 - Sometimes nested under quality groups (aftermarket, capa, oem)
 - Not guaranteed to be populated before quality selection
@@ -228,6 +244,7 @@ The `data-available` attribute provides a simpler, more direct source of truth.
 ### Button References
 
 The function updates both button references:
+
 - `currentAddToCartBtnLibrary`: Main Add to Cart button on desktop
 - `addToCartStickyLibrary`: Sticky Add to Cart button (appears on scroll)
 
@@ -240,6 +257,7 @@ Both must be updated to ensure consistent behavior across viewports.
 ### Manual Testing Checklist
 
 **Test Case 1: OOS Base to In-Stock Quality**
+
 1. Navigate to a product with OOS Aftermarket but in-stock CAPA
 2. Verify button is disabled on load
 3. Select CAPA quality
@@ -247,22 +265,26 @@ Both must be updated to ensure consistent behavior across viewports.
 5. ✅ Button should enable and allow Add to Cart
 
 **Test Case 2: In-Stock Base to OOS Quality**
+
 1. Navigate to a product with in-stock Aftermarket but OOS CAPA
 2. Select CAPA quality
 3. ✅ Button should disable (cannot purchase OOS variant)
 
 **Test Case 3: Direct In-Stock Variant Landing**
+
 1. Navigate directly to an in-stock CAPA variant URL
 2. Select paint option
 3. ✅ Button should enable (no regression)
 
 **Test Case 4: Multiple Quality Switches**
+
 1. Select CAPA (in stock) → button enables
 2. Select OEM (OOS) → button disables
 3. Select CAPA (in stock) again → button re-enables
 4. ✅ Button state should track quality availability
 
 **Test Case 5: Fitment Interaction**
+
 1. Select in-stock quality, select paint option
 2. ✅ If fitment is invalid, button should remain disabled
 3. Correct fitment
