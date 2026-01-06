@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+---
+
 # Auth Pages UI and Behavior Changes (Login + Register)
 
 ## Summary
@@ -15,10 +19,10 @@
 
 ## Files Changed
 
-| File                                                                             | Change Type | Purpose                                                                                                                         |
-| -------------------------------------------------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| [partify-theme/sections/login.liquid](partify-theme/sections/login.liquid)       | Modified    | Centered layout, logo placement, card styling, recovery button grid, CSS consolidation, button secondary styling                |
-| [partify-theme/sections/register.liquid](partify-theme/sections/register.liquid) | Modified    | Card wrapper, logo block, centered masthead, 5-field stack, password confirmation with validation script, button disabled state |
+| File                                   | Change Type | Purpose                                                                                                                         |
+| -------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| partify-theme/sections/login.liquid    | Modified    | Centered layout, logo placement, card styling, recovery button grid, CSS consolidation, button secondary styling                |
+| partify-theme/sections/register.liquid | Modified    | Card wrapper, logo block, centered masthead, 5-field stack, password confirmation with validation script, button disabled state |
 
 ---
 
