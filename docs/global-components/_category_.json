@@ -1,0 +1,8 @@
+{
+	"label": "Global Components",
+	"position": 3,
+	"link": {
+		"type": "generated-index",
+		"description": "Documentation for global components (e.g., navbar, footer, buttons)."
+	}
+}
