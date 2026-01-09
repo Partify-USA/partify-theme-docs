@@ -143,6 +143,10 @@ List all required inputs:
 
 Describe **decision trees**, not implementation details.
 
+## High-Level Flow Diagram
+
+- short high-level diagram or table to that doc showing the end-to-end flow
+
 ## Known Constraints & Gotchas
 
 - Assumptions

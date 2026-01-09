@@ -199,5 +199,5 @@ Navigation
 
 ## Owner & Maintenance
 
-- **Owner:** Frontend Team
+- **Owner:** Wyatt C.
 - **Last Updated:** 2026-01-09
