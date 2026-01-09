@@ -1,5 +1,5 @@
 ---
-title: Header Predictive Search Bar
+title: Search Bar
 description: Vehicle-scoped predictive search in the global navbar, backed by Shopify Predictive Search and EasySearch vehicle selection.
 ---
 
