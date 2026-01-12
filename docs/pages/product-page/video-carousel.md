@@ -74,8 +74,8 @@ Replace `X` with the next video number (1-howver many).
 1. Navigate to Product Videos metaobject (Not Product Videos Carousel)
 2. Click "Manage definition" at top
 3. Add two new fields:
-   - `video_<number>` - Type: **One URL**
-   - `video_<number>_label` - Type: **One single line text**
+   - `clip<number>` - Type: **One URL**
+   - `clip<number>_label` - Type: **One single line text**
 
 **Update entries:**
 
