@@ -67,11 +67,11 @@ Replace `X` with the next video number (1-howver many).
 - Find `{% for i in (1..6) %}` (around line 274)
 - Increment the range to match total videos: `{% for i in (1..7) %}`
 
-### 2. Product Videos Carousel Metaobject
+### 2. Product Videos Metaobject
 
 **Update definition:**
 
-1. Navigate to Product Videos Carousel metaobject
+1. Navigate to Product Videos metaobject (Not Product Videos Carousel)
 2. Click "Manage definition" at top
 3. Add two new fields:
    - `video_<number>` - Type: **One URL**
@@ -79,7 +79,7 @@ Replace `X` with the next video number (1-howver many).
 
 **Update entries:**
 
-1. Go to Front Bumper entry (and other entries if they exist)
+1. Go to Front Bumper Setentry (and other entries if they exist)
 2. Add the same title and URL used in product.json
 
 Once both locations are updated, the videos will appear in the carousel.
