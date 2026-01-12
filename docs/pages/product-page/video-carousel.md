@@ -79,7 +79,7 @@ Replace `X` with the next video number (1-howver many).
 
 **Update entries:**
 
-1. Go to Front Bumper Setentry (and other entries if they exist)
+1. Go to Front Bumper Set entry (and other entries if they exist)
 2. Add the same title and URL used in product.json
 
 Once both locations are updated, the videos will appear in the carousel.
