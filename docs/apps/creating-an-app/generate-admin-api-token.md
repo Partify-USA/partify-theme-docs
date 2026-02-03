@@ -7,52 +7,6 @@ description: End-to-end flow to create a custom app, connect it to Google Apps S
 
 Document the end-to-end process for creating a **custom Shopify app**, wiring it to our **Google Apps Script tools**, and safely obtaining a **Shopify Admin API access token** for a specific store.
 
-## Scope of Responsibility
-
-### Owns
-
-- Creating a custom app in the Shopify Dev Dashboard
-- Obtaining the app **Client ID** and **Client secret**
-- Configuring app **scopes** and **redirect URLs** in the Dev Dashboard
-- Wiring credentials and scopes into the Google Apps Script project:
-  - `Create Shopify Admin API Key` (Code.gs)
-  - `urlgenerator.gs`
-- Deploying the Apps Script as a web app and using it to:
-  - Generate the Shopify OAuth URL
-  - Complete the OAuth flow
-  - Store and retrieve the resulting Admin API access token
-
-### Does Not Own
-
-- Long-term token rotation or revocation policies
-- How the Admin API token is used by downstream scripts or services
-- Store-specific configuration outside this app + Apps Script workflow
-- Any embedded app UX or UI inside the Shopify admin
-
-## Data In
-
-- Shopify Partners account with access to the Dev Dashboard
-- Target store URL (e.g. `partify-usa-123.myshopify.com`)
-- Custom app configuration from the Dev Dashboard:
-  - Client ID
-  - Client secret
-  - Selected Admin API scopes
-- Google Apps Script project containing:
-  - `Code.gs` for the **Create Shopify Admin API Key** script
-  - `urlgenerator.gs` for generating the OAuth URL
-- Deployed Apps Script Web App URL (used as the redirect URL)
-
-## Data Out / Side Effects
-
-- New **custom app** created in the Shopify Dev Dashboard
-- New **version** of the app with specific Admin API scopes and redirect URL
-- Apps Script project updated with:
-  - Client ID and client secret
-  - Exact list of Admin API scopes
-  - Redirect URI pointing at the deployed Apps Script web app
-- Custom **install link** generated and used to install the app on a target store
-- Admin API **access token** created and stored by Apps Script (and visible in logs)
-
 ## Key Logic Areas
 
 ### 1. Create and Configure the Custom App (Dev Dashboard)
@@ -67,7 +21,6 @@ Document the end-to-end process for creating a **custom Shopify app**, wiring it
 
 - Open the Apps Script project for **Create Shopify Admin API Key**.
 - In `Code.gs`, update the configuration to use the **Client ID** and **Client secret** from the Dev Dashboard.
-- Keep these values secret; they should never be committed to source control.
 
 ### 3. Define Scopes and Redirect URL via App Versioning
 
@@ -166,5 +119,5 @@ Document the end-to-end process for creating a **custom Shopify app**, wiring it
 
 ## Owner & Maintenance
 
-- **Owner:** Frontend Team
+- **Owner:** Wyatt Chamberlin
 - **Last Updated:** 2026-02-03
