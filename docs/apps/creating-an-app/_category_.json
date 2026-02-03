@@ -1,0 +1,8 @@
+{
+	"label": "Generating Admin API Token",
+	"position": 1,
+	"link": {
+		"type": "generated-index",
+		"description": "How to generate and Admin API token."
+	}
+}
