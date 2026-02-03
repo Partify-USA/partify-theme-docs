@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-apps/creating-an-app/generate-admin-api-token" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.9.2">
+<title data-rh="true">Generate Shopify Admin API Token | Partify USA Documentation</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://Partify-USA.github.io/partify-theme-docs/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://Partify-USA.github.io/partify-theme-docs/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://Partify-USA.github.io/partify-theme-docs/docs/apps/creating-an-app/generate-admin-api-token"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Generate Shopify Admin API Token | Partify USA Documentation"><meta data-rh="true" name="description" content="End-to-end flow to create a custom app, connect it to Google Apps Script, and obtain a Shopify Admin API access token."><meta data-rh="true" property="og:description" content="End-to-end flow to create a custom app, connect it to Google Apps Script, and obtain a Shopify Admin API access token."><link data-rh="true" rel="icon" href="/partify-theme-docs/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://Partify-USA.github.io/partify-theme-docs/docs/apps/creating-an-app/generate-admin-api-token"><link data-rh="true" rel="alternate" href="https://Partify-USA.github.io/partify-theme-docs/docs/apps/creating-an-app/generate-admin-api-token" hreflang="en"><link data-rh="true" rel="alternate" href="https://Partify-USA.github.io/partify-theme-docs/docs/apps/creating-an-app/generate-admin-api-token" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Apps","item":"https://Partify-USA.github.io/partify-theme-docs/docs/category/apps"},{"@type":"ListItem","position":2,"name":"Generating Admin API Token","item":"https://Partify-USA.github.io/partify-theme-docs/docs/category/generating-admin-api-token"},{"@type":"ListItem","position":3,"name":"Generate Shopify Admin API Token","item":"https://Partify-USA.github.io/partify-theme-docs/docs/apps/creating-an-app/generate-admin-api-token"}]}</script><link rel="alternate" type="application/rss+xml" href="/partify-theme-docs/blog/rss.xml" title="Partify USA Documentation RSS Feed">
+<link rel="alternate" type="application/atom+xml" href="/partify-theme-docs/blog/atom.xml" title="Partify USA Documentation Atom Feed"><link rel="stylesheet" href="/partify-theme-docs/assets/css/styles.9072f9ea.css">
+<script src="/partify-theme-docs/assets/js/runtime~main.e6b434d1.js" defer="defer"></script>
+<script src="/partify-theme-docs/assets/js/main.8ebe5196.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/partify-theme-docs/img/logo.svg"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/partify-theme-docs/"><div class="navbar__logo"><img src="/partify-theme-docs/img/logo.svg" alt="Partify USA Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/partify-theme-docs/img/logo.svg" alt="Partify USA Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">Partify USA</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/partify-theme-docs/docs/category/apps">Documentation</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/partify/partify-theme-docs" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" href="/partify-theme-docs/docs/category/apps"><span title="Apps" class="categoryLinkLabel_W154">Apps</span></a><button aria-label="Collapse sidebar category &#x27;Apps&#x27;" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul class="menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" tabindex="0" href="/partify-theme-docs/docs/category/generating-admin-api-token"><span title="Generating Admin API Token" class="categoryLinkLabel_W154">Generating Admin API Token</span></a><button aria-label="Collapse sidebar category &#x27;Generating Admin API Token&#x27;" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/partify-theme-docs/docs/apps/creating-an-app/generate-admin-api-token"><span title="Generate Shopify Admin API Token" class="linkLabel_WmDU">Generate Shopify Admin API Token</span></a></li></ul></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" href="/partify-theme-docs/docs/category/pages"><span title="Pages" class="categoryLinkLabel_W154">Pages</span></a><button aria-label="Expand sidebar category &#x27;Pages&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" href="/partify-theme-docs/docs/category/global-components"><span title="Global Components" class="categoryLinkLabel_W154">Global Components</span></a><button aria-label="Expand sidebar category &#x27;Global Components&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" href="/partify-theme-docs/docs/category/contribution"><span title="Contribution" class="categoryLinkLabel_W154">Contribution</span></a><button aria-label="Expand sidebar category &#x27;Contribution&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/partify-theme-docs/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/partify-theme-docs/docs/category/apps"><span>Apps</span></a></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/partify-theme-docs/docs/category/generating-admin-api-token"><span>Generating Admin API Token</span></a></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">Generate Shopify Admin API Token</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Generate Shopify Admin API Token</h1></header><h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="purpose">Purpose<a href="#purpose" class="hash-link" aria-label="Direct link to Purpose" title="Direct link to Purpose" translate="no">​</a></h2>
+<p>Document the end-to-end process for creating a <strong>custom Shopify app</strong>, wiring it to our <strong>Google Apps Script tools</strong>, and safely obtaining a <strong>Shopify Admin API access token</strong> for a specific store.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="scope-of-responsibility">Scope of Responsibility<a href="#scope-of-responsibility" class="hash-link" aria-label="Direct link to Scope of Responsibility" title="Direct link to Scope of Responsibility" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="owns">Owns<a href="#owns" class="hash-link" aria-label="Direct link to Owns" title="Direct link to Owns" translate="no">​</a></h3>
+<ul>
+<li class="">Creating a custom app in the Shopify Dev Dashboard</li>
+<li class="">Obtaining the app <strong>Client ID</strong> and <strong>Client secret</strong></li>
+<li class="">Configuring app <strong>scopes</strong> and <strong>redirect URLs</strong> in the Dev Dashboard</li>
+<li class="">Wiring credentials and scopes into the Google Apps Script project:<!-- -->
+<ul>
+<li class=""><code>Create Shopify Admin API Key</code> (Code.gs)</li>
+<li class=""><code>urlgenerator.gs</code></li>
+</ul>
+</li>
+<li class="">Deploying the Apps Script as a web app and using it to:<!-- -->
+<ul>
+<li class="">Generate the Shopify OAuth URL</li>
+<li class="">Complete the OAuth flow</li>
+<li class="">Store and retrieve the resulting Admin API access token</li>
+</ul>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="does-not-own">Does Not Own<a href="#does-not-own" class="hash-link" aria-label="Direct link to Does Not Own" title="Direct link to Does Not Own" translate="no">​</a></h3>
+<ul>
+<li class="">Long-term token rotation or revocation policies</li>
+<li class="">How the Admin API token is used by downstream scripts or services</li>
+<li class="">Store-specific configuration outside this app + Apps Script workflow</li>
+<li class="">Any embedded app UX or UI inside the Shopify admin</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="data-in">Data In<a href="#data-in" class="hash-link" aria-label="Direct link to Data In" title="Direct link to Data In" translate="no">​</a></h2>
+<ul>
+<li class="">Shopify Partners account with access to the Dev Dashboard</li>
+<li class="">Target store URL (e.g. <code>partify-usa-123.myshopify.com</code>)</li>
+<li class="">Custom app configuration from the Dev Dashboard:<!-- -->
+<ul>
+<li class="">Client ID</li>
+<li class="">Client secret</li>
+<li class="">Selected Admin API scopes</li>
+</ul>
+</li>
+<li class="">Google Apps Script project containing:<!-- -->
+<ul>
+<li class=""><code>Code.gs</code> for the <strong>Create Shopify Admin API Key</strong> script</li>
+<li class=""><code>urlgenerator.gs</code> for generating the OAuth URL</li>
+</ul>
+</li>
+<li class="">Deployed Apps Script Web App URL (used as the redirect URL)</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="data-out--side-effects">Data Out / Side Effects<a href="#data-out--side-effects" class="hash-link" aria-label="Direct link to Data Out / Side Effects" title="Direct link to Data Out / Side Effects" translate="no">​</a></h2>
+<ul>
+<li class="">New <strong>custom app</strong> created in the Shopify Dev Dashboard</li>
+<li class="">New <strong>version</strong> of the app with specific Admin API scopes and redirect URL</li>
+<li class="">Apps Script project updated with:<!-- -->
+<ul>
+<li class="">Client ID and client secret</li>
+<li class="">Exact list of Admin API scopes</li>
+<li class="">Redirect URI pointing at the deployed Apps Script web app</li>
+</ul>
+</li>
+<li class="">Custom <strong>install link</strong> generated and used to install the app on a target store</li>
+<li class="">Admin API <strong>access token</strong> created and stored by Apps Script (and visible in logs)</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="key-logic-areas">Key Logic Areas<a href="#key-logic-areas" class="hash-link" aria-label="Direct link to Key Logic Areas" title="Direct link to Key Logic Areas" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="1-create-and-configure-the-custom-app-dev-dashboard">1. Create and Configure the Custom App (Dev Dashboard)<a href="#1-create-and-configure-the-custom-app-dev-dashboard" class="hash-link" aria-label="Direct link to 1. Create and Configure the Custom App (Dev Dashboard)" title="Direct link to 1. Create and Configure the Custom App (Dev Dashboard)" translate="no">​</a></h3>
+<ul>
+<li class="">Access the <strong>Shopify Dev Dashboard</strong> via Shopify Partners.</li>
+<li class="">Create a <strong>new app</strong> and explicitly make it a <strong>custom app</strong>.</li>
+<li class="">After creation, open the app <strong>Settings</strong> in the Dev Dashboard to obtain:<!-- -->
+<ul>
+<li class="">Client ID</li>
+<li class="">Client secret</li>
+</ul>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="2-wire-credentials-into-google-apps-script">2. Wire Credentials into Google Apps Script<a href="#2-wire-credentials-into-google-apps-script" class="hash-link" aria-label="Direct link to 2. Wire Credentials into Google Apps Script" title="Direct link to 2. Wire Credentials into Google Apps Script" translate="no">​</a></h3>
+<ul>
+<li class="">Open the Apps Script project for <strong>Create Shopify Admin API Key</strong>.</li>
+<li class="">In <code>Code.gs</code>, update the configuration to use the <strong>Client ID</strong> and <strong>Client secret</strong> from the Dev Dashboard.</li>
+<li class="">Keep these values secret; they should never be committed to source control.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="3-define-scopes-and-redirect-url-via-app-versioning">3. Define Scopes and Redirect URL via App Versioning<a href="#3-define-scopes-and-redirect-url-via-app-versioning" class="hash-link" aria-label="Direct link to 3. Define Scopes and Redirect URL via App Versioning" title="Direct link to 3. Define Scopes and Redirect URL via App Versioning" translate="no">​</a></h3>
+<ul>
+<li class="">In the Dev Dashboard, go to the app’s <strong>Versions</strong> area and click <strong>Create a version</strong>.</li>
+<li class="">Use <strong>Select scopes</strong> to enable all required Admin API permissions for this app.</li>
+<li class="">Copy the selected scopes and paste them into the Apps Script configuration so scopes match on both sides.</li>
+<li class="">Deploy the Apps Script project as a <strong>web app</strong> to obtain the Web App URL.</li>
+<li class="">Set this Web App URL as a <strong>Redirect URL</strong> inside <strong>Create a version</strong>.</li>
+<li class="">Uncheck <strong>Embed app in Shopify admin</strong> so the app runs as a non-embedded app.</li>
+<li class="">Click <strong>Release</strong> to release the new version with the updated scopes and redirect URL.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="4-install-the-custom-app-on-a-store">4. Install the Custom App on a Store<a href="#4-install-the-custom-app-on-a-store" class="hash-link" aria-label="Direct link to 4. Install the Custom App on a Store" title="Direct link to 4. Install the Custom App on a Store" translate="no">​</a></h3>
+<ul>
+<li class="">In Shopify Partners, within the same app, navigate to <strong>Distribution</strong>.</li>
+<li class="">Generate a <strong>custom install link</strong> for the app.</li>
+<li class="">Open the install link in a new browser tab.</li>
+<li class="">When prompted, choose the target store and install the app.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="5-generate-oauth-url-and-retrieve-the-admin-api-token">5. Generate OAuth URL and Retrieve the Admin API Token<a href="#5-generate-oauth-url-and-retrieve-the-admin-api-token" class="hash-link" aria-label="Direct link to 5. Generate OAuth URL and Retrieve the Admin API Token" title="Direct link to 5. Generate OAuth URL and Retrieve the Admin API Token" translate="no">​</a></h3>
+<ul>
+<li class="">In the Apps Script project, open <code>urlgenerator.gs</code>.</li>
+<li class="">Update <code>redirectUri</code> to match the <strong>deployed Web App URL</strong>.</li>
+<li class="">Run the function <code>testGenerateShopifyUrl</code> to generate the Shopify OAuth URL.</li>
+<li class="">Copy the generated URL from the <strong>execution log</strong>, open it in a new tab, and load it.</li>
+<li class="">If everything is configured correctly, Shopify will redirect and Apps Script will:<!-- -->
+<ul>
+<li class="">Show a success message such as <code>200: App installed successfully. Access token stored.</code></li>
+<li class="">Store the Admin API access token, and log it.</li>
+</ul>
+</li>
+<li class="">If the token is not visible in the browser response, check the Apps Script <strong>Executions</strong> logs for an entry like:<!-- -->
+<ul>
+<li class=""><code>SHOPIFY_ACCESS_TOKEN_FOR partify-usa-123.myshopify.com =&gt; shpca_...</code></li>
+</ul>
+</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="high-level-flow-diagram">High-Level Flow Diagram<a href="#high-level-flow-diagram" class="hash-link" aria-label="Direct link to High-Level Flow Diagram" title="Direct link to High-Level Flow Diagram" translate="no">​</a></h2>
+<table><thead><tr><th>Phase</th><th>Location</th><th>Summary</th></tr></thead><tbody><tr><td>1</td><td>Shopify Partners / Dev Dash</td><td>Create custom app and obtain Client ID + Client secret.</td></tr><tr><td>2</td><td>Google Apps Script</td><td>Update <code>Code.gs</code> with Client ID, Client secret, and prepare to use Admin API scopes.</td></tr><tr><td>3</td><td>Dev Dash → Versions</td><td>Create version, select scopes, set redirect URL to Apps Script Web App, release version</td></tr><tr><td>4</td><td>Shopify Partners → Distribution</td><td>Generate and use custom install link to install app on the target store.</td></tr><tr><td>5</td><td>Google Apps Script</td><td>Update <code>urlgenerator.gs</code>, generate OAuth URL, complete flow, and capture access token.</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="detailed-step-by-step-procedure">Detailed Step-by-Step Procedure<a href="#detailed-step-by-step-procedure" class="hash-link" aria-label="Direct link to Detailed Step-by-Step Procedure" title="Direct link to Detailed Step-by-Step Procedure" translate="no">​</a></h2>
+<ol>
+<li class="">Access the <strong>Shopify Dev Dashboard</strong> (via Shopify Partners).</li>
+<li class="">Create a <strong>new app</strong>.</li>
+<li class="">Configure it as a <strong>custom app</strong>.</li>
+<li class="">After the app is created, in the Dev Dashboard open the app <strong>Settings</strong> and note the <strong>Client ID</strong> and <strong>Client secret</strong>.</li>
+<li class="">Open the Google Apps Script project for the script named <strong>Create Shopify Admin API Key</strong>.</li>
+<li class="">In <code>Code.gs</code>, update the configuration with the new <strong>Client ID</strong> and <strong>Client secret</strong>.</li>
+<li class="">Back in the Dev Dashboard for this app, go to <strong>Versions</strong> and click <strong>Create a version</strong>.</li>
+<li class="">Within <strong>Create a version</strong>, click <strong>Select scopes</strong> and check all required Admin API permissions.</li>
+<li class="">After selecting all necessary scopes, copy the list and paste it into the Apps Script configuration so scopes match.</li>
+<li class="">In Apps Script, deploy the project as a <strong>Web App</strong> and copy the deployed Web App URL.</li>
+<li class="">In the Dev Dashboard <strong>Create a version</strong> screen, paste the Web App URL into <strong>Redirect URLs</strong>.</li>
+<li class="">Still in <strong>Create a version</strong>, uncheck <strong>Embed app in Shopify admin</strong>, since this is not an embedded app.</li>
+<li class="">Click <strong>Release</strong> to finalize the new version with the updated scopes and redirect URL.</li>
+<li class="">In Shopify Partners, ensure you are viewing this app, then go to <strong>Distribution</strong>.</li>
+<li class="">Follow the UI to create a <strong>custom install link</strong>.</li>
+<li class="">Copy the custom install link, paste it into a new browser tab, and press Enter.</li>
+<li class="">When prompted, select the target store and complete the app installation for that store.</li>
+<li class="">After installation, return to the Apps Script project and open <code>urlgenerator.gs</code>.</li>
+<li class="">In <code>urlgenerator.gs</code>, update <code>redirectUri</code> so it points to the deployed Web App URL (the same redirect URL used in the Dev Dashboard).</li>
+<li class="">Run the function <code>testGenerateShopifyUrl</code>.</li>
+<li class="">In the Apps Script execution log, copy the generated Shopify URL.</li>
+<li class="">Open a new browser tab, paste the URL, and press Enter to complete the OAuth flow.</li>
+<li class="">Confirm you see a message such as <code>200: App installed successfully. Access token stored.</code> (the access token may also be shown).</li>
+<li class="">If the token is not shown in the browser, open Apps Script <strong>Executions</strong>, inspect the latest run, and copy the token from a log line like: <code>SHOPIFY_ACCESS_TOKEN_FOR &lt;store&gt;.myshopify.com =&gt; shpca_...</code>.</li>
+</ol>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="known-constraints--gotchas">Known Constraints &amp; Gotchas<a href="#known-constraints--gotchas" class="hash-link" aria-label="Direct link to Known Constraints &amp; Gotchas" title="Direct link to Known Constraints &amp; Gotchas" translate="no">​</a></h2>
+<ul>
+<li class="">The <strong>redirect URL</strong> must match exactly between Apps Script and the Dev Dashboard version; mismatches will break OAuth.</li>
+<li class="">The <strong>scopes</strong> pasted into Apps Script must match the scopes selected in the Dev Dashboard.</li>
+<li class="">Changing scopes later requires creating a <strong>new version</strong> and reinstalling or re-authorizing the app.</li>
+<li class="">Admin API access tokens are <strong>sensitive secrets</strong>; tokens shown in logs must be handled securely and never committed.</li>
+<li class="">The app must remain configured as <strong>non-embedded</strong>; enabling &quot;Embed app in Shopify admin&quot; changes how redirects work.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="safe-to-change">Safe to Change<a href="#safe-to-change" class="hash-link" aria-label="Direct link to Safe to Change" title="Direct link to Safe to Change" translate="no">​</a></h2>
+<ul>
+<li class="">Adding or removing scopes <strong>as long as</strong> you:<!-- -->
+<ul>
+<li class="">Update both the Dev Dashboard version and Apps Script configuration</li>
+<li class="">Release a new version and re-run the install/authorization flow</li>
+</ul>
+</li>
+<li class="">Re-deploying the Apps Script Web App, provided you:<!-- -->
+<ul>
+<li class="">Update the redirect URL in the Dev Dashboard version configuration</li>
+</ul>
+</li>
+<li class="">Re-running <code>testGenerateShopifyUrl</code> to generate a fresh OAuth URL for troubleshooting</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="dangerous-to-change">Dangerous to Change<a href="#dangerous-to-change" class="hash-link" aria-label="Direct link to Dangerous to Change" title="Direct link to Dangerous to Change" translate="no">​</a></h2>
+<ul>
+<li class="">Client ID and Client secret values once the app is in active use</li>
+<li class="">Redirect URL (<code>redirectUri</code> in <code>urlgenerator.gs</code> and the Dev Dashboard configuration)</li>
+<li class="">Logic that stores or logs the Admin API access token in Apps Script</li>
+<li class="">How the custom install link is generated or altered, which can cause installs to target the wrong store</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="related-files">Related Files<a href="#related-files" class="hash-link" aria-label="Direct link to Related Files" title="Direct link to Related Files" translate="no">​</a></h2>
+<ul>
+<li class=""><code>Code.gs</code> (Create Shopify Admin API Key script)</li>
+<li class=""><code>urlgenerator.gs</code> (generates Shopify OAuth URL and uses the redirect URI)</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="owner--maintenance">Owner &amp; Maintenance<a href="#owner--maintenance" class="hash-link" aria-label="Direct link to Owner &amp; Maintenance" title="Direct link to Owner &amp; Maintenance" translate="no">​</a></h2>
+<ul>
+<li class=""><strong>Owner:</strong> Frontend Team</li>
+<li class=""><strong>Last Updated:</strong> 2026-02-03</li>
+</ul></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/partify/partify-theme-docs/tree/main/docs/apps/creating-an-app/generate-admin-api-token.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/partify-theme-docs/docs/category/generating-admin-api-token"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Generating Admin API Token</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/partify-theme-docs/docs/category/pages"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Pages</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#purpose" class="table-of-contents__link toc-highlight">Purpose</a></li><li><a href="#scope-of-responsibility" class="table-of-contents__link toc-highlight">Scope of Responsibility</a><ul><li><a href="#owns" class="table-of-contents__link toc-highlight">Owns</a></li><li><a href="#does-not-own" class="table-of-contents__link toc-highlight">Does Not Own</a></li></ul></li><li><a href="#data-in" class="table-of-contents__link toc-highlight">Data In</a></li><li><a href="#data-out--side-effects" class="table-of-contents__link toc-highlight">Data Out / Side Effects</a></li><li><a href="#key-logic-areas" class="table-of-contents__link toc-highlight">Key Logic Areas</a><ul><li><a href="#1-create-and-configure-the-custom-app-dev-dashboard" class="table-of-contents__link toc-highlight">1. Create and Configure the Custom App (Dev Dashboard)</a></li><li><a href="#2-wire-credentials-into-google-apps-script" class="table-of-contents__link toc-highlight">2. Wire Credentials into Google Apps Script</a></li><li><a href="#3-define-scopes-and-redirect-url-via-app-versioning" class="table-of-contents__link toc-highlight">3. Define Scopes and Redirect URL via App Versioning</a></li><li><a href="#4-install-the-custom-app-on-a-store" class="table-of-contents__link toc-highlight">4. Install the Custom App on a Store</a></li><li><a href="#5-generate-oauth-url-and-retrieve-the-admin-api-token" class="table-of-contents__link toc-highlight">5. Generate OAuth URL and Retrieve the Admin API Token</a></li></ul></li><li><a href="#high-level-flow-diagram" class="table-of-contents__link toc-highlight">High-Level Flow Diagram</a></li><li><a href="#detailed-step-by-step-procedure" class="table-of-contents__link toc-highlight">Detailed Step-by-Step Procedure</a></li><li><a href="#known-constraints--gotchas" class="table-of-contents__link toc-highlight">Known Constraints &amp; Gotchas</a></li><li><a href="#safe-to-change" class="table-of-contents__link toc-highlight">Safe to Change</a></li><li><a href="#dangerous-to-change" class="table-of-contents__link toc-highlight">Dangerous to Change</a></li><li><a href="#related-files" class="table-of-contents__link toc-highlight">Related Files</a></li><li><a href="#owner--maintenance" class="table-of-contents__link toc-highlight">Owner &amp; Maintenance</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Documentation</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/partify-theme-docs/docs/pages/product-page/vin-decoder">Product Page</a></li><li class="footer__item"><a class="footer__link-item" href="/partify-theme-docs/docs/contribution/documentation-rules">Contribution Guidelines</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Resources</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/partify/partify-theme-docs" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026 Partify USA. All rights reserved.</div></div></div></footer></div>
+</body>
+</html>
