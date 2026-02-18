@@ -193,6 +193,12 @@ module.exports = router;
 
 **That's it!** No changes needed to `server.js` - the route is already registered under `/webhook/sales-orders`.
 
+> **⚠️ NOTE:** If a new route group is created (e.g. `routes/purchase-orders.js`), you will need to register it in `server.js` like this:
+>
+> ```javascript
+> app.use("/webhook/purchase-orders", purchaseOrderRoutes);
+> ```
+
 ---
 
 ### Step 3: Update Health Check
