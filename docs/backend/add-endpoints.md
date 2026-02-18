@@ -1,6 +1,7 @@
 ---
 title: Adding New Endpoints
 description: Step-by-step process on how to add new endpoints to the Finale Webhook backend
+sidebar_position: 2
 ---
 
 # Guide: Adding New Webhook Endpoints

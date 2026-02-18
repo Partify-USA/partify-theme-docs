@@ -1,6 +1,7 @@
 ---
 title: Getting Set Up
 description: Step-by-step process on how to get set up with Finale Webhook backend
+sidebar_position: 1
 ---
 
 # Developer Onboarding Guide
