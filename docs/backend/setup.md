@@ -55,8 +55,6 @@ Welcome! This guide will help you get set up to work on the Finale Webhooks serv
 Open VS Code and install these extensions:
 
 - **REST Client** by Huachao Mao (for testing endpoints)
-- **ESLint** (for code quality)
-- **Prettier** (for code formatting)
 
 ---
 
@@ -100,7 +98,7 @@ You should see:
 cd C:\Users\YourName\Projects
 
 # Clone the repo (replace YOUR_USERNAME with actual GitHub username)
-git clone https://github.com/YOUR_USERNAME/finale-webhooks.git
+git clone https://github.com/Partify-USA/finale-webhooks.git
 
 # Navigate into the project
 cd finale-webhooks
@@ -167,41 +165,11 @@ Open a **new** terminal (Terminal → New Terminal) and run:
 # Test health check (should work even without valid credentials)
 curl http://localhost:8080/
 
-# Test damage endpoint (needs valid Finale credentials)
-curl -Method POST http://localhost:8080/webhook/damage `
-  -ContentType "application/json" `
-  -Body '{"orderId":"U167600B","sku":"KI1000169.SWP","quantity":1}'
-```
-
-If you see JSON responses, you're all set! ✅
+If you see a response with status code 200, you are all set! ✅
 
 Press `Ctrl+C` in the first terminal to stop the server.
 
-### Step 11: Test Using REST Client (Easier Method)
-
-1. Open `test.http` file in VS Code
-2. Click "Send Request" above any test
-3. See results right in VS Code!
-
----
-
 ## Part 4: View Production Logs
-
-### See Recent Logs
-
-```powershell
-gcloud run logs read finale-webhooks --region us-central1 --limit 50
-```
-
-### Stream Live Logs (Best for Debugging)
-
-```powershell
-gcloud run services logs tail finale-webhooks --region us-central1
-```
-
-Press `Ctrl+C` to stop streaming.
-
----
 
 ## 🎉 You're All Set!
 
@@ -209,57 +177,5 @@ You can now:
 
 - ✅ Run the service locally
 - ✅ Test endpoints
-- ✅ View production logs
 - ✅ Start developing new features
-
----
-
-## 📚 Next Steps
-
-- Read the [Adding New Routes Guide](#) below
-- Explore the codebase in `src/routes/` and `src/utils/`
-- Join the #finale-webhooks Slack channel (if applicable)
-
----
-
-## 🆘 Troubleshooting
-
-### "gcloud is not recognized"
-
-- Restart VS Code after installing gcloud CLI
-- Or restart Windows
-
-### "Cannot find module 'express'"
-
-```powershell
-npm install
 ```
-
-### "Permission denied" or authentication errors
-
-```powershell
-gcloud auth login
-gcloud auth application-default login
-gcloud config set project finale-jobs
-```
-
-### Local server won't start
-
-- Check that port 8080 isn't already in use
-- Make sure `.env` file exists and has valid credentials
-- Check console for error messages
-
-### Production logs show errors
-
-```powershell
-# Get detailed error logs
-gcloud run logs read finale-webhooks --region us-central1 --limit 100 --log-filter="severity>=ERROR"
-```
-
----
-
-## 📞 Need Help?
-
-- Check existing GitHub issues
-- Ask in team chat
-- Contact: [your team lead/contact info]
