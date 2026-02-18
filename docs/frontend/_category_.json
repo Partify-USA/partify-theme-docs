@@ -1,0 +1,8 @@
+{
+	"label": "Frontend",
+	"position": 1,
+	"link": {
+		"type": "generated-index",
+		"description": "Documentation for all things frontend (Liquid, Shopify Theme Code)."
+	}
+}
