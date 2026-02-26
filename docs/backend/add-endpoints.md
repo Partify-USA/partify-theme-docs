@@ -305,7 +305,7 @@ Wait for deployment to complete (2-5 minutes).
 Stream logs:
 
 ```powershell
-gcloud run services logs tail finale-webhooks --region us-central1
+gcloud alpha run services logs tail finale-webhooks --region us-central1
 ```
 
 Test in `test.http`:

@@ -19,7 +19,7 @@ Document the end-to-end process for creating a **custom Shopify app**, wiring it
 
 ### 2. Wire Credentials into Google Apps Script
 
-- Open the Apps Script project for **Create Shopify Admin API Key**.
+- Open the [Apps Script](https://script.google.com/d/1qw8nwJT1Bu1i8i_ajeeLfpveTcpHlGlcnltyxDPet9OsopAs7crqZXSL/edit?usp=sharing) project for **Create Shopify Admin API Key**.
 - In `Code.gs`, update the configuration to use the **Client ID** and **Client secret** from the Dev Dashboard.
 
 ### 3. Define Scopes and Redirect URL via App Versioning
