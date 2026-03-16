@@ -72,30 +72,20 @@ const { detectTenant, randomId } = require("../../utils/finale");
  */
 async function handleCancelOrder({ orderId, reason, execId }) {
 	try {
-		// Detect tenant
 		const tenant = detectTenant(orderId);
 		if (!tenant) {
-			return {
-				ok: false,
-				error: "Unable to detect tenant from orderId",
-			};
+			return { ok: false, error: "Unable to detect tenant from orderId" };
 		}
 
 		console.log(`[${execId}] Canceling ${tenant} order: ${orderId}`);
 
-		// Fetch the order
 		const orderResult = await fetchOrder(tenant, orderId);
 		if (!orderResult.ok) {
-			return {
-				ok: false,
-				step: "fetch-order",
-				error: orderResult.error,
-			};
+			return { ok: false, step: "fetch-order", error: orderResult.error };
 		}
 
 		const order = orderResult.order;
 
-		// Validate order can be canceled
 		const canModify = canModifyOrder(order);
 		if (!canModify.ok) {
 			return {
@@ -120,17 +110,11 @@ async function handleCancelOrder({ orderId, reason, execId }) {
 		};
 	} catch (err) {
 		console.error(`handleCancelOrder error:`, err);
-		return {
-			ok: false,
-			error: err.message || String(err),
-			stack: err.stack,
-		};
+		return { ok: false, error: err.message || String(err), stack: err.stack };
 	}
 }
 
-module.exports = {
-	handleCancelOrder,
-};
+module.exports = { handleCancelOrder };
 ```
 
 **Note:** This handler uses `common.js` utilities - no need to rewrite fetch/validate logic!
@@ -164,27 +148,20 @@ router.post("/cancel", async (req, res) => {
 	try {
 		const { orderId, reason } = req.body;
 
-		// Validate input
 		if (!orderId) {
-			return res.status(400).json({
-				ok: false,
-				execId,
-				error: "orderId required",
-			});
+			return res
+				.status(400)
+				.json({ ok: false, execId, error: "orderId required" });
 		}
 
-		// Call handler
 		const result = await handleCancelOrder({ orderId, reason, execId });
-
 		const statusCode = result.ok ? 200 : 500;
 		res.status(statusCode).json(result);
 	} catch (err) {
 		console.error(`[${execId}] Error:`, err);
-		res.status(500).json({
-			ok: false,
-			execId,
-			error: err.message || String(err),
-		});
+		res
+			.status(500)
+			.json({ ok: false, execId, error: err.message || String(err) });
 	}
 });
 
@@ -261,8 +238,7 @@ Content-Type: application/json
 
 ### Step 5: Test Locally
 
-```powershell
-# Start the server
+```bash
 npm start
 ```
 
@@ -270,56 +246,48 @@ In VS Code:
 
 1. Open `test.http`
 2. Click "Send Request" above your cancel test
-3. Check the response
-4. Check console logs
+3. Check the response and console logs
 
 ---
 
-### Step 6: Commit Your Changes
+### Step 6: Commit & Push to Deploy 🚀
 
-```powershell
+> ✅ The service is connected to GitHub — pushing to main automatically deploys to Cloud Run. No manual deploy command needed.
+
+```bash
 git pull --rebase origin main
 git add .
 git commit -m "Add sales order cancel endpoint"
 git push origin main
 ```
 
+Cloud Build will automatically trigger, build, and deploy. You can monitor progress at [console.cloud.google.com/cloud-build/builds](https://console.cloud.google.com/cloud-build/builds).
+
+> 🛡️ **Safe to push:** If the build fails, your live service is unaffected. Cloud Run only routes traffic to a new revision after it passes a health check.
+
 ---
 
-### Step 7: Deploy to Production
+### Step 7: Verify the Deploy
 
-```powershell
-gcloud run deploy finale-webhooks `
-  --source . `
-  --region us-central1 `
-  --allow-unauthenticated `
-  --platform managed
+Once the Cloud Build finishes (2-5 minutes), confirm the new revision is live:
+
+```
+https://finale-webhooks-648477666631.us-central1.run.app/
 ```
 
-Wait for deployment to complete (2-5 minutes).
+The health check should list your new endpoint.
+
+To stream live logs:
+
+```bash
+gcloud alpha run services logs tail finale-webhooks --region us-central1
+```
 
 ---
 
 ### Step 8: Test Production
 
-Stream logs:
-
-```powershell
-gcloud alpha run services logs tail finale-webhooks --region us-central1
-```
-
-Test in `test.http`:
-
-```http
-### Test Cancel Order - Production
-POST https://finale-webhooks-648477666631.us-central1.run.app/webhook/sales-orders/cancel
-Content-Type: application/json
-
-{
-  "orderId": "U123456",
-  "reason": "Test cancellation"
-}
-```
+In `test.http`, click "Send Request" on your production test case and confirm the response.
 
 ---
 
@@ -339,7 +307,6 @@ Create: `src/handlers/products/`
 const { createFinaleConfig, finaleGet } = require("../../utils/finale");
 
 async function handleProductUpdate({ productId, data, execId }) {
-	// Your product update logic here
 	return { ok: true, productId, updated: true };
 }
 
@@ -370,7 +337,6 @@ module.exports = router;
 **Edit:** `server.js`
 
 ```javascript
-// At the top
 const productRoutes = require("./src/routes/products");
 
 // After other route registrations
@@ -390,16 +356,18 @@ const myConfig = process.env.MY_CONFIG_VALUE;
 const damageFacility = process.env.FINALE_US_DAMAGE_FACILITY_ID;
 ```
 
-To add new environment variables:
+To add a new environment variable:
 
-1. **Add to `.env.example`** (template for team)
-2. **Add to your `.env`** (your local values)
-3. **Add to Cloud Run:**
-   ```powershell
-   gcloud run services update finale-webhooks `
-     --region us-central1 `
+1. **Add to `.env.example`** (template for the team)
+2. **Add to your `.env`** (your local values — never committed to Git)
+3. **Add to Cloud Run once via CLI:**
+   ```bash
+   gcloud run services update finale-webhooks \
+     --region us-central1 \
      --set-env-vars "MY_CONFIG_VALUE=my-value"
    ```
+
+Environment variables set in Cloud Run persist across all future auto-deploys. You only need to set them again if a value changes.
 
 ---
 
@@ -410,15 +378,35 @@ Before submitting a PR:
 - [ ] Created handler file in `src/handlers/{category}/`
 - [ ] Created or updated route file in `src/routes/`
 - [ ] Registered route in `server.js` (if new category)
-- [ ] Added endpoint to health check endpoint list
+- [ ] Added endpoint to health check list
 - [ ] Reused common utilities where possible
 - [ ] Added tests in `test.http`
 - [ ] Tested locally with `npm start`
 - [ ] Added proper error handling
-- [ ] Committed and pushed to GitHub
-- [ ] Deployed to Cloud Run
-- [ ] Tested in production
+- [ ] Pushed to main branch → auto-deploys to Cloud Run
+- [ ] Verified build succeeded in Cloud Build console
+- [ ] Tested production endpoint in `test.http`
 - [ ] Updated documentation if needed
+
+---
+
+## 🔍 Searching Logs in Google Cloud
+
+To look up logs for a specific order, go to [Logs Explorer](https://console.cloud.google.com/logs/query) in Google Cloud and use the following query, replacing the order ID as needed:
+
+```
+resource.type = "cloud_run_revision"
+resource.labels.service_name = "finale-webhooks"
+resource.labels.location = "us-central1"
+severity>=DEFAULT
+jsonPayload.originalOrderId="U170434A/D1"
+```
+
+or you can look it up by the execId with this query:
+
+`jsonPayload.execId="DMG_EXEC_2026-03-16T19:14:24.604Z_or3cg6hi"`
+
+The `jsonPayload.originalOrderId` field filters logs down to a specific order, making it easy to trace exactly what happened during a webhook execution.
 
 ---
 
