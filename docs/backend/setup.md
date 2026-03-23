@@ -120,18 +120,45 @@ You should see "added X packages" when it completes.
    Copy-Item .env.example .env
    ```
 
-2. **Get credentials from team lead** - Ask for:
-   - Finale US API credentials
-   - Finale CA API credentials
-   - Webhook tokens (if applicable)
+2. **Get credentials** - Ask for:
+   - Slack webhook URL
+   - US, CA & Paint Finale store names, API keys, and secrets
+   - US, CA webhook tokens
+   - Google Cloud Postgres DB host, name, user, and password
 
 3. **Edit `.env` file** in VS Code and fill in the values:
 
    ```
-   FINALE_US_STORE=partifyusa
-   FINALE_US_API_KEY=your_actual_key_here
-   FINALE_US_API_SECRET=your_actual_secret_here
-   # ... etc
+   # Slack Webhook
+   SLACK_WEBHOOK_URL=your_slack_webhook_url
+
+   # Store Identifiers
+   US_FINALE_STORE=partifyusa
+   CA_FINALE_STORE=partifyinc
+   PAINT_FINALE_STORE=partify
+
+   # Google Cloud - Postgres SQL
+   DB_HOST=your_db_host
+   DB_NAME=your_db_name
+   DB_USER=your_db_user
+   DB_PASSWORD=your_db_password
+
+   # US Sales Order Damage Create
+   US_FINALE_SORDAMAGE_KEY=your_key_here
+   US_FINALE_SORDAMAGE_SECRET=your_secret_here
+   US_FINALE_WEBHOOK_TOKEN=your_token_here
+
+   # CA Sales Order Damage Create
+   CA_FINALE_SORDAMAGE_KEY=your_key_here
+   CA_FINALE_SORDAMAGE_SECRET=your_secret_here
+   CA_FINALE_WEBHOOK_TOKEN=your_token_here
+
+   # Paint Finale
+   PAINT_FINALE_SORDAMAGE_KEY=your_key_here
+   PAINT_FINALE_SORDAMAGE_SECRET=your_secret_here
+
+   # Server Configuration
+   PORT=8080
    ```
 
 4. **Save the file** (Ctrl+S)
@@ -148,11 +175,12 @@ You should see "added X packages" when it completes.
 npm start
 ```
 
-You should see:
+You should see pino log output similar to:
 
 ```
-🚀 Finale webhooks service running on port 8080
-Environment: development
+[HH:MM:SS.MMM] INFO: Finale webhooks service started
+    port: 8080
+    environment: "development"
 ```
 
 **Keep this terminal running.**
