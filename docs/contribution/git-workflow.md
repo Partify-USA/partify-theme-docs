@@ -16,8 +16,7 @@ Always pull in any theme editor changes from `main-usa` before starting local de
 
 ```bash
 git checkout main
-git fetch origin main-usa
-git merge origin/main-usa
+git pull origin main-usa
 ```
 
 **Making Changes**
