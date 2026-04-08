@@ -2,7 +2,7 @@
 sidebar_position: 1000
 ---
 
-# 📘 Shopify Theme Documentation Standards
+# Documentation Standards
 
 **Audience:** Frontend engineers working on the Shopify theme  
 **Scope:** Theme JSON templates, Liquid, JavaScript, and app integrations  

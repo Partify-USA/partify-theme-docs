@@ -1,5 +1,5 @@
 ---
-title: Theme Workflow
+title: Theme Git Workflow
 sidebar_position: 999
 ---
 
