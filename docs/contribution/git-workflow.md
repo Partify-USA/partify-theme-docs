@@ -12,12 +12,12 @@ sidebar_position: 999
 - `main-ca` — connected to the CA Shopify store
 
 **Before Starting Any Work**
-Always sync `main` with `main-usa` first to catch any theme editor changes:
+Always pull in any theme editor changes from `main-usa` before starting local development. This keeps your local `main` up to date without triggering the sync action:
 
 ```bash
 git checkout main
-git pull origin main-usa
-git push origin main
+git fetch origin main-usa
+git merge origin/main-usa
 ```
 
 **Making Changes**
