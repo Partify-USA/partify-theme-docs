@@ -102,3 +102,49 @@ git reset --hard origin/main-ca
 # or in your main-usa worktree
 git reset --hard origin/main-usa
 ```
+
+---
+
+**Manually Syncing main to main-ca (when auto-sync fails)**
+
+When a push to `main` includes blocked files (non-allowlisted), the GitHub Action skips the entire auto-sync and sends a Slack notification. When this happens, you need to manually carry the changes to `main-ca`.
+
+The best approach is to cherry-pick the merge commit from `main` directly onto `main-ca`. The Slack notification includes the commit SHA.
+
+> **Important:** Pushes to `main` via PR are merge commits. Cherry-picking a merge commit requires the `-m 1` flag to tell git which parent to diff against (`1` = `main`, which is always correct here).
+
+1. Make sure your local `main-ca` is up to date:
+
+```bash
+# in your main-ca worktree
+git pull origin main-ca
+```
+
+2. Cherry-pick the merge commit using the SHA from the Slack notification:
+
+```bash
+git cherry-pick -m 1 <commit-sha>
+```
+
+3. Git will auto-merge all allowlisted files and flag conflicts only on the blocked files (e.g. `templates/*.json`, `layout/theme.liquid`). Resolve each conflict manually — preserving CA-specific logic while incorporating the new feature changes.
+
+4. Once all conflicts are resolved:
+
+```bash
+git add .
+git cherry-pick --continue
+```
+
+5. Test locally with Shopify CLI before pushing:
+
+```bash
+shopify theme dev
+```
+
+6. When satisfied, push to the live CA branch:
+
+```bash
+git push origin main-ca
+```
+
+> **Why this works well:** Cherry-picking the merge commit lets git handle all the allowlisted files automatically. You only need to manually review the files that are intentionally different between stores — which is exactly what you want.
