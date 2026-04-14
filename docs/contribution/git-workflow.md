@@ -35,6 +35,23 @@ git pull origin main
 - When you push to `main`, the GitHub Action automatically cherry-picks the commit onto both `main-usa` and `main-ca` for allowlisted files
 - If your push includes non-allowlisted files, you'll get a Slack notification listing the files that need to be manually carried over
 
+**Commit Message Tags**
+
+You can control which stores receive a push by adding a tag to your commit message:
+
+| Tag          | Effect                                    |
+| ------------ | ----------------------------------------- |
+| _(no tag)_   | Syncs to both `main-usa` and `main-ca`    |
+| `[usa-only]` | Syncs to `main-usa` only, skips `main-ca` |
+| `[ca-only]`  | Syncs to `main-ca` only, skips `main-usa` |
+| `[no-sync]`  | Skips both stores entirely                |
+
+Example:
+
+```bash
+git commit -m "update header logo [usa-only]"
+```
+
 **Allowlisted Files (auto-sync to both stores)**
 
 - `snippets/*`
@@ -159,21 +176,37 @@ When someone makes a change directly in the Shopify theme editor, Shopify automa
 
 When you see this notification, you need to decide:
 
-- **Is this change store-specific?** (content, section settings, colors, etc.) — leave it on the store branch, no action needed on `main`.
+- **Is this change store-specific?** (content, section settings, colors, etc.):
+
+1. If the change was on `main-ca` leave it on the ca branch.
+2. If the change was on `main-usa`, must bring forward to `main` to keep `main` and `main-usa` in sync.
+
 - **Should this change apply to both stores?** — cherry-pick it into `main` and let the action handle the rest.
 
-**Note: If a change is made on main-usa, then main must be updated to reflect main-usa**
-To bring a theme editor change into `main`:
+**Bringing a theme editor change into main:**
 
-1. Note the commit SHA from the Slack notification, then go to your `main` worktree:
+1. Note the commit SHA from the Slack notification, then go to your `main` worktree and cherry-pick it:
 
 ```bash
 # in your main worktree
 git cherry-pick <commit-sha>
+```
+
+2. If the change should only apply to the store it came from, add the appropriate tag to the commit before pushing:
+
+```bash
+# for a change that came from main-usa and should stay USA only
+git commit --amend -m "your commit message [usa-only]"
+```
+
+3. Push to `main`:
+
+```bash
+# in your main worktree
 git push origin main
 ```
 
-2. The action will auto-sync the change to the other store branch.
+4. If you used `[usa-only]`, the action will only sync to the `main-usa` store. If you used no tag, the action will sync to both stores.
 
 > **Important:** Never pull or merge `main-usa` or `main-ca` into `main` to capture theme editor changes — always use cherry-pick on the specific commit.
 
