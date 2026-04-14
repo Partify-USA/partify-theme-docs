@@ -98,7 +98,7 @@ git commit -m "your message"
 2. Grab the commit hash:
 
 ```bash
-git log --oneline
+git log --oneline -1
 ```
 
 3. Go to your `main` worktree and cherry-pick the commit:
