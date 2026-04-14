@@ -12,21 +12,18 @@ sidebar_position: 999
 - `main-ca` — connected to the CA Shopify store
 
 **Before Starting Any Work on Main**
-Check if there are any theme editor changes on `main-usa` that aren't on `main` yet:
+Check that all three branches are in sync by comparing their latest commits:
 
 ```bash
 git fetch --all
-git log origin/main..origin/main-usa --oneline
+git log --oneline -1 origin/main
+git log --oneline -1 origin/main-usa
+git log --oneline -1 origin/main-ca
 ```
 
-If there are real commits (ignore any "Merge branch" commits — those are action noise), cherry-pick them into `main`:
+If all three show the same commit message, you're in sync and can proceed. If any differ, check the rest of this doc for the appropriate cherry-pick process depending on which branch is behind.
 
-```bash
-git cherry-pick <commit-hash>
-git push origin main
-```
-
-Then pull `main` as normal:
+Then pull `main` before starting work:
 
 ```bash
 git pull origin main
@@ -47,6 +44,7 @@ git pull origin main
 - `assets/global-library.js`
 - `locales/en.default.json`
 - `locales/es.json`
+- `...others not listed here`
 
 **Everything else** requires manual carry-over to `main-usa` and `main-ca` after pushing to `main`.
 
@@ -64,7 +62,7 @@ git push origin bugfix/ca-specific-fix
 
 Then open a PR into `main-ca` on GitHub. Do not push store-specific changes to `main`.
 
-**Working on a Fix That Affects Both Stores**
+**Working on a Fix on One Store That Affects Both Stores**
 
 If you find an issue on one store that also needs to be applied to the other, use cherry-pick to bring the fix into `main` and let the action handle the rest.
 
@@ -123,14 +121,16 @@ git pull origin main-ca
 2. Cherry-pick the merge commit using the SHA from the Slack notification:
 
 ```bash
+# in your main-ca worktree
 git cherry-pick -m 1 <commit-sha>
 ```
 
-3. Git will auto-merge all allowlisted files and flag conflicts only on the blocked files (e.g. `templates/*.json`, `layout/theme.liquid`). Resolve each conflict manually — preserving CA-specific logic while incorporating the new feature changes.
+3. Git will auto-merge all allowlisted files. For blocked files (e.g. `templates/*.json`, `layout/theme.liquid`), git will attempt to auto-merge them too — but if CA has a diverged version of any of those files, you'll get a conflict that needs to be resolved manually, preserving CA-specific logic while incorporating the new feature changes.
 
 4. Once all conflicts are resolved:
 
 ```bash
+# in your main-ca worktree
 git add .
 git cherry-pick --continue
 ```
@@ -138,16 +138,18 @@ git cherry-pick --continue
 5. Test locally with Shopify CLI before pushing:
 
 ```bash
+# in your main-ca worktree
 shopify theme dev
 ```
 
 6. When satisfied, push to the live CA branch:
 
 ```bash
+# in your main-ca worktree
 git push origin main-ca
 ```
 
-> **Why this works well:** Cherry-picking the merge commit lets git handle all the allowlisted files automatically. You only need to manually review the files that are intentionally different between stores — which is exactly what you want.
+> **Why this works well:** Cherry-picking the merge commit lets git handle all the allowlisted files automatically. You only need to manually review the files that are intentionally different between stores.
 
 ---
 
