@@ -21,7 +21,7 @@ git log --oneline -1 origin/main-usa
 git log --oneline -1 origin/main-ca
 ```
 
-If all three show the same commit message, you're in sync and can proceed. If any differ, check the rest of this doc for the appropriate cherry-pick process depending on which branch is behind.
+If all three show the same commit message, you're in sync and can proceed. If any differ, check the rest of this doc for the appropriate cherry-pick process depending on which branch is behind. Only exception to when the commit message is different is if the `main` branch has `[no-sync]` in its commit message -- then it is okay if the commit message differs.
 
 Then pull `main` before starting work:
 
@@ -150,6 +150,32 @@ git push origin main-ca
 ```
 
 > **Why this works well:** Cherry-picking the merge commit lets git handle all the allowlisted files automatically. You only need to manually review the files that are intentionally different between stores.
+
+---
+
+**Theme Editor Changes (Shopify Bot Commits)**
+
+When someone makes a change directly in the Shopify theme editor, Shopify automatically commits it to the connected branch (`main-usa` or `main-ca`) authored by `shopify[bot]`. A Slack notification will fire alerting you to the change.
+
+When you see this notification, you need to decide:
+
+- **Is this change store-specific?** (content, section settings, colors, etc.) — leave it on the store branch, no action needed on `main`.
+- **Should this change apply to both stores?** — cherry-pick it into `main` and let the action handle the rest.
+
+**Note: If a change is made on main-usa, then main must be updated to reflect main-usa**
+To bring a theme editor change into `main`:
+
+1. Note the commit SHA from the Slack notification, then go to your `main` worktree:
+
+```bash
+# in your main worktree
+git cherry-pick <commit-sha>
+git push origin main
+```
+
+2. The action will auto-sync the change to the other store branch.
+
+> **Important:** Never pull or merge `main-usa` or `main-ca` into `main` to capture theme editor changes — always use cherry-pick on the specific commit.
 
 ---
 
