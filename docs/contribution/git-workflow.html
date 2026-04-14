@@ -5,7 +5,7 @@
 <meta name="generator" content="Docusaurus v3.9.2">
 <title data-rh="true">Theme Git Workflow | Partify USA Documentation</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://Partify-USA.github.io/partify-theme-docs/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://Partify-USA.github.io/partify-theme-docs/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://Partify-USA.github.io/partify-theme-docs/docs/contribution/git-workflow"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Theme Git Workflow | Partify USA Documentation"><meta data-rh="true" name="description" content="Partify Theme Git Workflow"><meta data-rh="true" property="og:description" content="Partify Theme Git Workflow"><link data-rh="true" rel="icon" href="/partify-theme-docs/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://Partify-USA.github.io/partify-theme-docs/docs/contribution/git-workflow"><link data-rh="true" rel="alternate" href="https://Partify-USA.github.io/partify-theme-docs/docs/contribution/git-workflow" hreflang="en"><link data-rh="true" rel="alternate" href="https://Partify-USA.github.io/partify-theme-docs/docs/contribution/git-workflow" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Contribution","item":"https://Partify-USA.github.io/partify-theme-docs/docs/category/contribution"},{"@type":"ListItem","position":2,"name":"Theme Git Workflow","item":"https://Partify-USA.github.io/partify-theme-docs/docs/contribution/git-workflow"}]}</script><link rel="alternate" type="application/rss+xml" href="/partify-theme-docs/blog/rss.xml" title="Partify USA Documentation RSS Feed">
 <link rel="alternate" type="application/atom+xml" href="/partify-theme-docs/blog/atom.xml" title="Partify USA Documentation Atom Feed"><link rel="stylesheet" href="/partify-theme-docs/assets/css/styles.9072f9ea.css">
-<script src="/partify-theme-docs/assets/js/runtime~main.91be5d1b.js" defer="defer"></script>
+<script src="/partify-theme-docs/assets/js/runtime~main.8a5e534d.js" defer="defer"></script>
 <script src="/partify-theme-docs/assets/js/main.cf37b740.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -22,7 +22,7 @@
 <p><strong>Before Starting Any Work on Main</strong>
 Check that all three branches are in sync by comparing their latest commits:</p>
 <div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">git fetch --all</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">git log --oneline -1 origin/main</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">git log --oneline -1 origin/main-usa</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">git log --oneline -1 origin/main-ca</span><br></span></code></pre></div></div>
-<p>If all three show the same commit message, you&#x27;re in sync and can proceed. If any differ, check the rest of this doc for the appropriate cherry-pick process depending on which branch is behind.</p>
+<p>If all three show the same commit message, you&#x27;re in sync and can proceed. If any differ, check the rest of this doc for the appropriate cherry-pick process depending on which branch is behind. Only exception to when the commit message is different is if the <code>main</code> branch has <code>[no-sync]</code> in its commit message -- then it is okay if the commit message differs.</p>
 <p>Then pull <code>main</code> before starting work:</p>
 <div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">git pull origin main</span><br></span></code></pre></div></div>
 <p><strong>Making Changes</strong></p>
@@ -31,6 +31,11 @@ Check that all three branches are in sync by comparing their latest commits:</p>
 <li class="">When you push to <code>main</code>, the GitHub Action automatically cherry-picks the commit onto both <code>main-usa</code> and <code>main-ca</code> for allowlisted files</li>
 <li class="">If your push includes non-allowlisted files, you&#x27;ll get a Slack notification listing the files that need to be manually carried over</li>
 </ul>
+<p><strong>Commit Message Tags</strong></p>
+<p>You can control which stores receive a push by adding a tag to your commit message:</p>
+<table><thead><tr><th>Tag</th><th>Effect</th></tr></thead><tbody><tr><td><em>(no tag)</em></td><td>Syncs to both <code>main-usa</code> and <code>main-ca</code></td></tr><tr><td><code>[usa-only]</code></td><td>Syncs to <code>main-usa</code> only, skips <code>main-ca</code></td></tr><tr><td><code>[ca-only]</code></td><td>Syncs to <code>main-ca</code> only, skips <code>main-usa</code></td></tr><tr><td><code>[no-sync]</code></td><td>Skips both stores entirely</td></tr></tbody></table>
+<p>Example:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">git commit -m &quot;update header logo [usa-only]&quot;</span><br></span></code></pre></div></div>
 <p><strong>Allowlisted Files (auto-sync to both stores)</strong></p>
 <ul>
 <li class=""><code>snippets/*</code></li>
@@ -103,6 +108,39 @@ If a change is store-specific, always work on a branch off <code>main-ca</code> 
 <div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># in your main-ca worktree</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">git push origin main-ca</span><br></span></code></pre></div></div>
 <blockquote>
 <p><strong>Why this works well:</strong> Cherry-picking the merge commit lets git handle all the allowlisted files automatically. You only need to manually review the files that are intentionally different between stores.</p>
+</blockquote>
+<hr>
+<p><strong>Theme Editor Changes (Shopify Bot Commits)</strong></p>
+<p>When someone makes a change directly in the Shopify theme editor, Shopify automatically commits it to the connected branch (<code>main-usa</code> or <code>main-ca</code>) authored by <code>shopify[bot]</code>. A Slack notification will fire alerting you to the change.</p>
+<p>When you see this notification, you need to decide:</p>
+<ul>
+<li class=""><strong>Is this change store-specific?</strong> (content, section settings, colors, etc.):</li>
+</ul>
+<ol>
+<li class="">If the change was on <code>main-ca</code> leave it on the ca branch.</li>
+<li class="">If the change was on <code>main-usa</code>, must bring forward to <code>main</code> to keep <code>main</code> and <code>main-usa</code> in sync.</li>
+</ol>
+<ul>
+<li class=""><strong>Should this change apply to both stores?</strong> — cherry-pick it into <code>main</code> and let the action handle the rest.</li>
+</ul>
+<p><strong>Bringing a theme editor change into main:</strong></p>
+<ol>
+<li class="">Note the commit SHA from the Slack notification, then go to your <code>main</code> worktree and cherry-pick it:</li>
+</ol>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># in your main worktree</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">git cherry-pick &lt;commit-sha&gt;</span><br></span></code></pre></div></div>
+<ol start="2">
+<li class="">If the change should only apply to the store it came from, add the appropriate tag to the commit before pushing:</li>
+</ol>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># for a change that came from main-usa and should stay USA only</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">git commit --amend -m &quot;your commit message [usa-only]&quot;</span><br></span></code></pre></div></div>
+<ol start="3">
+<li class="">Push to <code>main</code>:</li>
+</ol>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># in your main worktree</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">git push origin main</span><br></span></code></pre></div></div>
+<ol start="4">
+<li class="">If you used <code>[usa-only]</code>, the action will only sync to the <code>main-usa</code> store. If you used no tag, the action will sync to both stores.</li>
+</ol>
+<blockquote>
+<p><strong>Important:</strong> Never pull or merge <code>main-usa</code> or <code>main-ca</code> into <code>main</code> to capture theme editor changes — always use cherry-pick on the specific commit.</p>
 </blockquote>
 <hr>
 <p><strong>Important: Never merge a deploy branch back into main</strong></p>
