@@ -35,7 +35,7 @@ git pull origin main
 **Making Changes**
 
 - All changes go to `main` (or a branch off `main` via PR)
-- When you push to `main`, the GitHub Action automatically merges allowlisted files into both `main-usa` and `main-ca`
+- When you push to `main`, the GitHub Action automatically cherry-picks the commit onto both `main-usa` and `main-ca` for allowlisted files
 - If your push includes non-allowlisted files, you'll get a Slack notification listing the files that need to be manually carried over
 
 **Allowlisted Files (auto-sync to both stores)**
@@ -148,3 +148,11 @@ git push origin main-ca
 ```
 
 > **Why this works well:** Cherry-picking the merge commit lets git handle all the allowlisted files automatically. You only need to manually review the files that are intentionally different between stores — which is exactly what you want.
+
+---
+
+**Important: Never merge a deploy branch back into main**
+
+Never run `git merge main-usa` or `git merge main-ca` into `main`. The deploy branches can diverge from `main` (especially `main-ca`), and merging them back introduces that divergence into `main`, which then causes conflicts on every future auto-sync.
+
+If you need changes from a deploy branch in `main`, use cherry-pick to bring over the specific commits — never a full merge.
