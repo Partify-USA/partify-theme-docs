@@ -3,15 +3,16 @@ title: Theme Git Workflow
 sidebar_position: 999
 ---
 
-**Partify Theme Git Workflow**
+## Partify Theme Git Workflow
 
-**Branch Structure**
+## Branch Structure
 
 - `main` — source of truth, all development happens here
 - `main-usa` — connected to the USA Shopify store
 - `main-ca` — connected to the CA Shopify store
 
-**Before Starting Any Work on Main**
+## Before Starting Any Work on Main
+
 Check that all three branches are in sync by comparing their latest commits:
 
 ```bash
@@ -29,13 +30,13 @@ Then pull `main` before starting work:
 git pull origin main
 ```
 
-**Making Changes**
+## Making Changes
 
 - All changes go to `main` (or a branch off `main` via PR)
 - When you push to `main`, the GitHub Action automatically cherry-picks the commit onto both `main-usa` and `main-ca` for allowlisted files
 - If your push includes non-allowlisted files, you'll get a Slack notification listing the files that need to be manually carried over
 
-**Commit Message Tags**
+## Commit Message Tags
 
 You can control which stores receive a push by adding a tag to your commit message:
 
@@ -52,7 +53,7 @@ Example:
 git commit -m "update header logo [usa-only]"
 ```
 
-**Allowlisted Files (auto-sync to both stores)**
+## Allowlisted Files (auto-sync to both stores)
 
 - `snippets/*`
 - `sections/*`
@@ -65,7 +66,8 @@ git commit -m "update header logo [usa-only]"
 
 **Everything else** requires manual carry-over to `main-usa` and `main-ca` after pushing to `main`.
 
-**CA/USA Specific Changes**
+## CA/USA Specific Changes
+
 If a change is store-specific, always work on a branch off `main-ca` or `main-usa` rather than directly on the branch. This keeps the store branch clean and prevents conflicts with the auto-sync action:
 
 ```bash
@@ -79,7 +81,7 @@ git push origin bugfix/ca-specific-fix
 
 Then open a PR into `main-ca` on GitHub. Do not push store-specific changes to `main`.
 
-**Working on a Fix on One Store That Affects Both Stores**
+## Working on a Fix on One Store That Affects Both Stores
 
 If you find an issue on one store that also needs to be applied to the other, use cherry-pick to bring the fix into `main` and let the action handle the rest.
 
@@ -120,7 +122,7 @@ git reset --hard origin/main-usa
 
 ---
 
-**Manually Syncing main to main-ca (when auto-sync fails)**
+## Manually Syncing main to main-ca (when auto-sync fails)
 
 When a push to `main` includes blocked files (non-allowlisted), the GitHub Action skips the entire auto-sync and sends a Slack notification. When this happens, you need to manually carry the changes to `main-ca`.
 
@@ -170,7 +172,7 @@ git push origin main-ca
 
 ---
 
-**Theme Editor Changes (Shopify Bot Commits)**
+## Theme Editor Changes (Shopify Bot Commits)
 
 When someone makes a change directly in the Shopify theme editor, Shopify automatically commits it to the connected branch (`main-usa` or `main-ca`) authored by `shopify[bot]`. A Slack notification will fire alerting you to the change.
 
@@ -212,7 +214,7 @@ git push origin main
 
 ---
 
-**Important: Never merge a deploy branch back into main**
+## Important: Never merge a deploy branch back into main
 
 Never run `git merge main-usa` or `git merge main-ca` into `main`. The deploy branches can diverge from `main` (especially `main-ca`), and merging them back introduces that divergence into `main`, which then causes conflicts on every future auto-sync.
 
