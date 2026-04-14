@@ -22,7 +22,10 @@ git log --oneline -1 origin/main-usa
 git log --oneline -1 origin/main-ca
 ```
 
-If all three show the same commit message, you're in sync and can proceed. If any differ, check the rest of this doc for the appropriate cherry-pick process depending on which branch is behind. Only exception to when the commit message is different is if the `main` branch has `[no-sync]` in its commit message -- then it is okay if the commit message differs.
+If all three show the same commit message, you're in sync and can proceed. If any differ, check the rest of this doc for the appropriate cherry-pick process depending on which branch is behind. Exceptions where a differing commit message is okay:
+
+- `main` has `[no-sync]` in its commit message
+- A store branch has an auto-generated merge commit from a `git pull` (message will say "Merge branch...")
 
 Then pull `main` before starting work:
 
