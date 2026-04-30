@@ -26,6 +26,7 @@ If all three show the same commit message, you're in sync and can proceed. If an
 
 - `main` has `[no-sync]` in its commit message
 - A store branch has an auto-generated merge commit from a `git pull` (message will say "Merge branch...")
+- A store branch has unsynced `shopify[bot]` commits that haven't been brought into `main` yet — follow the [Theme Editor Changes](#theme-editor-changes-shopify-bot-commits) process below before proceeding
 
 Then pull `main` before starting work:
 
@@ -88,75 +89,6 @@ Then open a PR into `main-ca` on GitHub. Do not push store-specific changes to `
 
 ---
 
-## Manually Syncing main (when auto-sync fails)
-
-When a push to `main` includes blocked files (non-allowlisted), the GitHub Action skips the entire auto-sync and sends a Slack notification. When this happens, you need to manually carry the changes to `main-ca` and `main-usa`.
-
-The best approach is to cherry-pick the merge commit from `main` directly onto `main-ca`. The Slack notification includes the commit SHA.
-
-> **Important:** Pushes to `main` via PR are merge commits. Cherry-picking a merge commit requires the `-m 1` flag to tell git which parent to diff against (`1` = `main`, which is always correct here).
-
-1. Make sure your local `main-ca` and `main-usa` is up to date:
-
-```bash
-# in your main-ca worktree
-git pull origin main-ca
-```
-
-```bash
-# in your main-usa worktree
-git pull origin main-usa
-```
-
-2. Cherry-pick the merge commit using the SHA from the Slack notification:
-
-```bash
-# in your main-ca and main-usa worktree
-
-# add on the -m 1 if the push to main was a merge from a pull request
-git cherry-pick -m 1 <commit-sha>
-
-# or
-
-# run the following if push was directly to _main_
-git cherry-pick <commit-sha>
-```
-
-3. Git will auto-merge all allowlisted files. For blocked files (e.g. `templates/*.json`, `layout/theme.liquid`), git will attempt to auto-merge them too — but if CA or US has a diverged version of any of those files, you'll get a conflict that needs to be resolved manually, preserving CA-specific logic while incorporating the new feature changes.
-
-- If there were conflicts, fix them. Once all conflicts are resolved:
-
-```bash
-# in your main-ca and main-usa worktree
-git add .
-git cherry-pick --continue
-```
-
-- If there were no conflicts, proceed to next step.
-
-4. Test locally with Shopify CLI before pushing:
-
-```bash
-# in your main-ca and main-usa worktree
-shopify theme dev
-```
-
-5. When satisfied, push to the live CA/US branch:
-
-```bash
-# in your main-ca worktree
-git push origin main-ca
-```
-
-```bash
-# in your main-usa worktree
-git push origin main-usa
-```
-
-> **Why this works well:** Cherry-picking the merge commit lets git handle all the allowlisted files automatically. You only need to manually review the files that are intentionally different between stores.
-
----
-
 ## Working on a Fix on One Store That Affects Both Stores
 
 If you find an issue on one store that also needs to be applied to the other, use cherry-pick to bring the fix into `main` and let the action handle the rest.
@@ -171,7 +103,7 @@ git commit -m "your message"
 2. Grab the commit hash:
 
 ```bash
-git log --oneline -1
+git log --oneline
 ```
 
 3. Go to your `main` worktree and cherry-pick the commit:
@@ -198,20 +130,71 @@ git reset --hard origin/main-usa
 
 ---
 
+## Manually Syncing main to main-ca (when auto-sync fails)
+
+When a push to `main` includes blocked files (non-allowlisted), the GitHub Action skips the entire auto-sync and sends a Slack notification. When this happens, you need to manually carry the changes to `main-ca`.
+
+The best approach is to cherry-pick the merge commit from `main` directly onto `main-ca`. The Slack notification includes the commit SHA.
+
+> **Important:** Pushes to `main` via PR are merge commits. Cherry-picking a merge commit requires the `-m 1` flag to tell git which parent to diff against (`1` = `main`, which is always correct here).
+
+1. Make sure your local `main-ca` is up to date:
+
+```bash
+# in your main-ca worktree
+git pull origin main-ca
+```
+
+2. Cherry-pick the merge commit using the SHA from the Slack notification:
+
+```bash
+# in your main-ca worktree
+git cherry-pick -m 1 <commit-sha>
+```
+
+3. Git will auto-merge all allowlisted files. For blocked files (e.g. `templates/*.json`, `layout/theme.liquid`), git will attempt to auto-merge them too — but if CA has a diverged version of any of those files, you'll get a conflict that needs to be resolved manually, preserving CA-specific logic while incorporating the new feature changes.
+
+4. Once all conflicts are resolved:
+
+```bash
+# in your main-ca worktree
+git add .
+git cherry-pick --continue
+```
+
+5. Test locally with Shopify CLI before pushing:
+
+```bash
+# in your main-ca worktree
+shopify theme dev
+```
+
+6. When satisfied, push to the live CA branch:
+
+```bash
+# in your main-ca worktree
+git push origin main-ca
+```
+
+> **Why this works well:** Cherry-picking the merge commit lets git handle all the allowlisted files automatically. You only need to manually review the files that are intentionally different between stores.
+
+---
+
 ## Theme Editor Changes (Shopify Bot Commits)
 
 When someone makes a change directly in the Shopify theme editor, Shopify automatically commits it to the connected branch (`main-usa` or `main-ca`) authored by `shopify[bot]`. A Slack notification will fire alerting you to the change.
 
-When you see this notification, you need to decide:
+`main` and `main-usa` must always stay in sync — `main` is what you develop against locally with `shopify theme dev`, so any theme editor changes on `main-usa` that don't get brought into `main` mean you're developing against stale code.
+
+When you see a bot commit notification, you need to decide:
 
 - **Is this change store-specific?** (content, section settings, colors, etc.):
+  - If the change was on `main-ca` — leave it on the CA branch, no action needed.
+  - If the change was on `main-usa` — always bring it forward to `main`.
 
-1. If the change was on `main-ca` leave it on the ca branch.
-2. If the change was on `main-usa`, must bring forward to `main` to keep `main` and `main-usa` in sync.
+- **Should this change apply to both stores?** — cherry-pick it into `main` with no tag and let the action handle the rest.
 
-- **Should this change apply to both stores?** — cherry-pick it into `main` and let the action handle the rest.
-
-**Bringing a theme editor change into main:**
+### Single bot commit
 
 1. Note the commit SHA from the Slack notification, then go to your `main` worktree and cherry-pick it:
 
@@ -220,7 +203,7 @@ When you see this notification, you need to decide:
 git cherry-pick <commit-sha>
 ```
 
-2. If the change should only apply to the store it came from, add the appropriate tag to the commit before pushing:
+2. If the change should only apply to the store it came from, amend the commit with the appropriate tag before pushing:
 
 ```bash
 # for a change that came from main-usa and should stay USA only
@@ -234,9 +217,40 @@ git commit --amend -m "your commit message [usa-only]"
 git push origin main
 ```
 
-4. If you used `[usa-only]`, the action will only sync to the `main-usa` store. If you used no tag, the action will sync to both stores.
+### Multiple bot commits (batch catch-up)
 
-> **Important:** Never pull or merge `main-usa` or `main-ca` into `main` to capture theme editor changes — always use cherry-pick on the specific commit.
+If several bot commits have accumulated on `main-usa` without being brought into `main`, squash them into a single commit rather than cherry-picking each one individually.
+
+1. First, see what commits need to come over:
+
+```bash
+git log origin/main..origin/main-usa --oneline
+```
+
+2. Cherry-pick the full range oldest-first (the bottom commit in the log output is oldest):
+
+```bash
+# in your main worktree
+git cherry-pick <oldest-sha>^..<newest-sha>
+```
+
+3. Squash them all down to a single commit:
+
+```bash
+git reset --soft origin/main
+git commit -m "theme editor changes from main-usa [no-sync]"
+```
+
+> We use `[no-sync]` here because these are blocked files (e.g. `theme.liquid`) that the action can't sync anyway — this avoids unnecessary Slack noise.
+
+4. Push to `main`:
+
+```bash
+# in your main worktree
+git push origin main
+```
+
+> **Important:** Never pull or merge `main-usa` or `main-ca` into `main` to capture theme editor changes — always use cherry-pick on the specific commit(s).
 
 ---
 
