@@ -1,0 +1,8 @@
+{
+	"label": "Testing",
+	"position": 10,
+	"link": {
+		"type": "generated-index",
+		"description": "Documentation on how to set up Intelligems tests"
+	}
+}
