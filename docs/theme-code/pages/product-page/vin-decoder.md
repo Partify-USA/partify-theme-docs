@@ -1332,6 +1332,11 @@ The VIN decoder input box system elegantly handles two distinct user flows using
 
 **Document Version:** 1.0  
 **Last Updated:** December 24, 2025  
+
+**Related Documentation:**
+
+- [Paint Decode Pipeline](../../../data-and-decoding/paint-decode-pipeline.md) — the backend ChromeData/Bumper decode services this input box calls
+
 **Related Files:**
 
 - `snippets/vin-decoder-input-box.liquid`

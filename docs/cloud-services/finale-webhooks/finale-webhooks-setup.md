@@ -1,7 +1,7 @@
 ---
 title: Getting Set Up
 description: Step-by-step process on how to get set up with Finale Webhook backend
-sidebar_position: 1
+sidebar_position: 3
 ---
 
 # Developer Onboarding Guide
@@ -9,6 +9,8 @@ sidebar_position: 1
 ## Finale Webhooks Cloud Run Service
 
 Welcome! This guide will help you get set up to work on the Finale Webhooks service.
+
+> For what the service actually does end-to-end, read [Finale Webhooks — Architecture](finale-webhooks.md) first.
 
 ---
 
@@ -120,44 +122,67 @@ You should see "added X packages" when it completes.
    Copy-Item .env.example .env
    ```
 
-2. **Get credentials** - Ask for:
-   - Slack webhook URL
-   - US, CA & Paint Finale store names, API keys, and secrets
-   - US, CA webhook tokens
-   - Google Cloud Postgres DB host, name, user, and password
+2. **Get credentials** - Ask for the values behind every key in `.env.example`.
+   The service has grown well beyond the original damage webhook, so the
+   credential set spans several integrations (Finale, Postgres, Google OAuth,
+   Shopify, Yotpo, Redo, Slack).
 
-3. **Edit `.env` file** in VS Code and fill in the values:
+3. **Edit `.env` file** in VS Code and fill in the values. `.env.example` is the
+   authoritative list; the current groups are:
 
    ```
-   # Slack Webhook
-   SLACK_WEBHOOK_URL=your_slack_webhook_url
+   # Slack
+   SLACK_WEBHOOK_URL=
 
-   # Store Identifiers
-   US_FINALE_STORE=partifyusa
-   CA_FINALE_STORE=partifyinc
-   PAINT_FINALE_STORE=partify
+   # Finale store identifiers
+   US_FINALE_STORE=
+   CA_FINALE_STORE=
+   PAINT_FINALE_STORE=
 
    # Google Cloud - Postgres SQL
-   DB_HOST=your_db_host
-   DB_NAME=your_db_name
-   DB_USER=your_db_user
-   DB_PASSWORD=your_db_password
+   DB_HOST=
+   DB_NAME=
+   DB_USER=
+   DB_PASSWORD=
 
-   # US Sales Order Damage Create
-   US_FINALE_SORDAMAGE_KEY=your_key_here
-   US_FINALE_SORDAMAGE_SECRET=your_secret_here
-   US_FINALE_WEBHOOK_TOKEN=your_token_here
+   # Finale API keys/secrets + webhook tokens (per tenant)
+   US_FINALE_SORDAMAGE_KEY=
+   US_FINALE_SORDAMAGE_SECRET=
+   US_FINALE_WEBHOOK_TOKEN=
+   CA_FINALE_SORDAMAGE_KEY=
+   CA_FINALE_SORDAMAGE_SECRET=
+   CA_FINALE_WEBHOOK_TOKEN=
+   PAINT_FINALE_SORDAMAGE_KEY=
+   PAINT_FINALE_SORDAMAGE_SECRET=
 
-   # CA Sales Order Damage Create
-   CA_FINALE_SORDAMAGE_KEY=your_key_here
-   CA_FINALE_SORDAMAGE_SECRET=your_secret_here
-   CA_FINALE_WEBHOOK_TOKEN=your_token_here
+   # Endpoint auth (shared secret for /webhook + /jobs)
+   PARTIFY_SECRET=
 
-   # Paint Finale
-   PAINT_FINALE_SORDAMAGE_KEY=your_key_here
-   PAINT_FINALE_SORDAMAGE_SECRET=your_secret_here
+   # Google OAuth (Paint Match UI)
+   GOOGLE_CLIENT_ID=
+   GOOGLE_CLIENT_SECRET=
+   GOOGLE_CALLBACK_URL=
+   ALLOWED_EMAIL_DOMAINS=
+   SESSION_SECRET=
 
-   # Server Configuration
+   # Shopify (Admin API per store)
+   SHOPIFY_CLIENT_ID=
+   SHOPIFY_CLIENT_SECRET=
+   SHOPIFY_US_STORE=
+   SHOPIFY_CA_STORE=
+   SHOPIFY_EBAY_STORE=
+
+   # Yotpo (reviews import)
+   YOTPO_US_APP_KEY=
+   YOTPO_US_SECRET_KEY=
+
+   # Redo (returns sync, per tenant)
+   REDO_US_STORE_ID=
+   REDO_US_API_SECRET=
+   REDO_CA_STORE_ID=
+   REDO_CA_API_SECRET=
+
+   # Server
    PORT=8080
    ```
 

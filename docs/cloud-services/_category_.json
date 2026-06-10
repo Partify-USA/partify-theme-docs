@@ -1,0 +1,8 @@
+{
+	"label": "Cloud Services",
+	"position": 2,
+	"link": {
+		"type": "generated-index",
+		"description": "Google Cloud Run services, GCP project layout, schedulers, and where secrets live."
+	}
+}

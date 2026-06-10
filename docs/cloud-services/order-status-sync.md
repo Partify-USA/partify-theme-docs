@@ -1,6 +1,7 @@
 ---
 title: Order Status Production Sync (Google Cloud Run)
 description: Google Cloud Run service that reads open orders from Google Sheets, aggregates scan data in PostgreSQL, and pushes production status metafields directly to Shopify via the GraphQL Admin API.
+sidebar_position: 5
 ---
 
 ## Purpose
@@ -46,6 +47,8 @@ requests.http               VS Code REST Client file for local testing
 ## Deployment
 
 The service is deployed on **Google Cloud Run** (`sql-order-status-tracking-sheets`, region `us-east5`) with **continuous deployment from GitHub** (`Partify-USA/order-tracking-api`, branch `main`). Every push to `main` triggers a Cloud Build using the `Dockerfile` and automatically deploys a new revision.
+
+**Console:** [Cloud Run — `sql-order-status-tracking-sheets`](https://console.cloud.google.com/run/detail/us-east5/sql-order-status-tracking-sheets/metrics?project=alpine-sentry-448804-d4)
 
 Secrets (`credentials.json` and `dbConfig.json`) are stored in **Google Secret Manager** and mounted as files inside the container. The service reads their paths from environment variables:
 
@@ -224,6 +227,11 @@ Cloud Scheduler (cron)
 - `credentials.json` — Google Sheets service account credentials (gitignored, mounted via Secret Manager in Cloud Run)
 - Cloud Scheduler job: `sql-order-status-sync-sheets` — triggers `GET /run-job`
 - `requests.http` — VS Code REST Client file for all local test endpoints
+
+## Related Documentation
+
+- [Google Sheets Logging](../data-and-decoding/google-sheets-logging.md) — the Open Orders sheet this service reads from
+- [Cloud Services Overview](overview.md)
 
 ## Owner & Maintenance
 

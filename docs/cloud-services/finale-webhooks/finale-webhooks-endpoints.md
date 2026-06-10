@@ -1,12 +1,12 @@
 ---
 title: Adding New Endpoints
 description: Step-by-step process on how to add new endpoints to the Finale Webhook backend
-sidebar_position: 2
+sidebar_position: 4
 ---
 
 # Guide: Adding New Webhook Endpoints
 
-This guide walks you through creating new webhook endpoints in the Finale Webhooks service using the handlers architecture.
+This guide walks you through creating new endpoints in the Finale Webhooks service using the routes + handlers architecture. For the full service map, see [Finale Webhooks — Architecture](finale-webhooks.md).
 
 ---
 
@@ -15,20 +15,23 @@ This guide walks you through creating new webhook endpoints in the Finale Webhoo
 The service is organized like this:
 
 ```
-finale-webhooks/
-├── server.js                        # Main app - register route groups here
+finale_jobs/
+├── server.js                        # Mounts route groups + auth middleware
 ├── src/
+│   ├── middleware/
+│   │   ├── auth.js                  # requireSecret (x-partify-secret header)
+│   │   └── googleAuth.js            # requireAuth (Google OAuth, Paint Match)
 │   ├── routes/                      # Route groups (HTTP layer)
-│   │   ├── sales-orders.js          # All sales order endpoints
-│   │   ├── purchase-orders.js       # All purchase order endpoints
-│   │   └── products.js              # All product endpoints
+│   │   ├── selling.js               # Sales-order webhooks AND /jobs/selling jobs
+│   │   ├── inventory.js             # /jobs/products endpoints
+│   │   └── paintMatch.js            # /paint-match UI + data
 │   ├── handlers/                    # Business logic
-│   │   ├── sales-orders/
-│   │   │   ├── damage.js            # Damage order handler
-│   │   │   ├── cancel.js            # Cancel order handler
-│   │   │   └── common.js            # Shared utilities
-│   │   ├── purchase-orders/
-│   │   └── products/
+│   │   └── selling/
+│   │       ├── damage.js            # Damage order handler
+│   │       ├── create.js            # Create order handler
+│   │       ├── cancel.js            # Cancel order handler
+│   │       ├── sync-orders.js       # Shopify → DB sync
+│   │       └── common.js            # Shared cross-border helpers
 │   └── utils/
 │       └── finale.js                # Finale API utilities
 └── test.http                        # Tests for all endpoints
@@ -36,9 +39,21 @@ finale-webhooks/
 
 **Architecture Pattern:**
 
-- **Routes** = Grouped by category (validation + HTTP handling)
+- **Routes** = Grouped by domain (validation + HTTP handling)
 - **Handlers** = Business logic (pure functions, testable, reusable)
-- **URLs** = `/webhook/{category}/{action}` (e.g., `/webhook/sales-orders/damage`)
+- **URLs** = event webhooks at `/webhook/sales-orders/{action}` and scheduled
+  jobs at `/jobs/selling/{action}` or `/jobs/products/{action}`
+
+> **Two prefixes, one router:** `selling.js` is mounted at **both**
+> `/webhook/sales-orders` and `/jobs/selling` in `server.js`, so any route you
+> add there is reachable under both prefixes.
+>
+> **Auth:** all `/webhook/*` and `/jobs/*` routes sit behind `requireSecret` —
+> callers must send the `x-partify-secret` header. The Paint Match UI uses
+> `requireAuth` (Google OAuth) instead.
+>
+> **Dry-run:** every selling route reads a dry-run flag via `parseDryRunFlag`
+> (`x-dry-run` header or `dryRun` in query/body) to skip Finale writes.
 
 **Benefits:**
 
@@ -56,7 +71,7 @@ Let's add a "cancel" endpoint for sales orders at `/webhook/sales-orders/cancel`
 
 ### Step 1: Create the Handler
 
-**Create:** `src/handlers/sales-orders/cancel.js`
+**Create:** `src/handlers/selling/cancel.js`
 
 ```javascript
 /**
@@ -123,17 +138,17 @@ module.exports = { handleCancelOrder };
 
 ### Step 2: Add the Route
 
-**Edit:** `src/routes/sales-orders.js`
+**Edit:** `src/routes/selling.js`
 
-Add the new route to the existing file:
+Add the new route to the existing file (it already contains the damage, create, cancel, and `/jobs/selling/*` routes):
 
 ```javascript
 const express = require("express");
 const router = express.Router();
 
 // Import handlers
-const { handleDamageOrder } = require("../handlers/sales-orders/damage");
-const { handleCancelOrder } = require("../handlers/sales-orders/cancel"); // ← Add this
+const { handleDamageOrder } = require("../handlers/selling/damage");
+const { handleCancelOrder } = require("../handlers/selling/cancel"); // ← Add this
 const { randomId } = require("../utils/finale");
 
 // Existing damage route
@@ -168,12 +183,13 @@ router.post("/cancel", async (req, res) => {
 module.exports = router;
 ```
 
-**That's it!** No changes needed to `server.js` - the route is already registered under `/webhook/sales-orders`.
+**That's it!** No changes needed to `server.js` — `selling.js` is already mounted (under both `/webhook/sales-orders` and `/jobs/selling`), so the new route is live under both prefixes.
 
-> **⚠️ NOTE:** If a new route group is created (e.g. `routes/purchase-orders.js`), you will need to register it in `server.js` like this:
+> **⚠️ NOTE:** If you create a *new* route group (e.g. `routes/purchase-orders.js`), register it in `server.js` **with the secret middleware** like the others:
 >
 > ```javascript
-> app.use("/webhook/purchase-orders", purchaseOrderRoutes);
+> const purchaseOrderRoutes = require("./src/routes/purchase-orders");
+> app.use("/webhook/purchase-orders", requireSecret, purchaseOrderRoutes);
 > ```
 
 ---
@@ -339,11 +355,11 @@ module.exports = router;
 ```javascript
 const productRoutes = require("./src/routes/products");
 
-// After other route registrations
-app.use("/webhook/products", productRoutes);
+// After other route registrations — include requireSecret like the other groups
+app.use("/webhook/products", requireSecret, productRoutes);
 ```
 
-Now you have `/webhook/products/update` available!
+Now you have `/webhook/products/update` available (behind the `x-partify-secret` header)!
 
 ---
 

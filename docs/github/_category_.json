@@ -1,0 +1,8 @@
+{
+	"label": "GitHub",
+	"position": 4,
+	"link": {
+		"type": "generated-index",
+		"description": "Repository inventory, GitHub Actions workflows, and the deploy pipelines that push to Cloud Run and the theme."
+	}
+}
