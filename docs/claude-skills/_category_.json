@@ -1,6 +1,6 @@
 {
 	"label": "Claude Skills",
-	"position": 3,
+	"position": 990,
 	"link": {
 		"type": "generated-index",
 		"description": "Skills for Claude to make our lives easier."
