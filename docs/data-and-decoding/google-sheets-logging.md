@@ -21,14 +21,14 @@ logging sheet, what it captures, and where the action originates.
 
 ## Sheets Inventory
 
-| Sheet | Spreadsheet | Logs | Entry point | Status |
-| --- | --- | --- | --- | --- |
-| **Garage API Usage — USA** | [`1KT_uGMW…YHrwg`](https://docs.google.com/spreadsheets/d/1KT_uGMW0ESPVW3tv9TO548fUAwRhXmwZp6ots1YHrwg/edit) | Vehicle lookups entered at the **Garage** (US store) | Navbar + product-page AdamSearch | Live |
-| **Garage API Usage — CA** | [`1QSuRy7T…rxVCts`](https://docs.google.com/spreadsheets/d/1QSuRy7TJX3Smc2EGIzweG5cw0ilhHGm-sapk-rxVCts/edit) | Vehicle lookups entered at the **Garage** (CA store) | Navbar + product-page AdamSearch | Live |
-| **VIN Decoder Logs** | [`1OZl8bux…dv8cI`](https://docs.google.com/spreadsheets/d/1OZl8buxoSPjU3OXTfp7Fhn4r4CmuW34DM78WFidv8cI/edit) | Vehicle lookups entered at the **VIN Decoder** | Product page → paint options section | Live |
-| **Order Status Tracker Logs** | [`15Lm5HHA…uVqNc`](https://docs.google.com/spreadsheets/d/15Lm5HHAfK_wacnJj5ByECL0oexARG7oScsSkxEuVqNc/edit) | Every order lookup on the order-status tracker page | Order Status Tracker page | Live |
-| **Search Bar Queries** | [`1WJPfWf1…LzZ5E`](https://docs.google.com/spreadsheets/d/1WJPfWf1O7GIj5gyKRtTqQhPDCW9lHQaohHQ7tCLzZ5E/edit) | Every query a user enters into the search bar | Predictive search bar (navbar) | Live |
-| **Bumper vs Qapter Orders** | [`1q9wOo_a…RZtzs`](https://docs.google.com/spreadsheets/d/1q9wOo_auNVkI300La_nJsALyKGRqLaM5uD44pkRZtzs/edit) | VINs decoded by Bumper.com, for accuracy auditing | — | **Discontinued** |
+| Sheet                         | Spreadsheet                                                                                                   | Logs                                                 | Entry point                          | Status           |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- | ------------------------------------ | ---------------- |
+| **Garage API Usage — USA**    | [`1KT_uGMW…YHrwg`](https://docs.google.com/spreadsheets/d/1KT_uGMW0ESPVW3tv9TO548fUAwRhXmwZp6ots1YHrwg/edit)  | Vehicle lookups entered at the **Garage** (US store) | Navbar + product-page AdamSearch     | Live             |
+| **Garage API Usage — CA**     | [`1QSuRy7T…rxVCts`](https://docs.google.com/spreadsheets/d/1QSuRy7TJX3Smc2EGIzweG5cw0ilhHGm-sapk-rxVCts/edit) | Vehicle lookups entered at the **Garage** (CA store) | Navbar + product-page AdamSearch     | Live             |
+| **VIN Decoder Logs**          | [`1OZl8bux…dv8cI`](https://docs.google.com/spreadsheets/d/1OZl8buxoSPjU3OXTfp7Fhn4r4CmuW34DM78WFidv8cI/edit)  | Vehicle lookups entered at the **VIN Decoder**       | Product page → paint options section | Live             |
+| **Order Status Tracker Logs** | [`15Lm5HHA…uVqNc`](https://docs.google.com/spreadsheets/d/15Lm5HHAfK_wacnJj5ByECL0oexARG7oScsSkxEuVqNc/edit)  | Every order lookup on the order-status tracker page  | Order Status Tracker page            | Live             |
+| **Search Bar Queries**        | [`1WJPfWf1…LzZ5E`](https://docs.google.com/spreadsheets/d/1WJPfWf1O7GIj5gyKRtTqQhPDCW9lHQaohHQ7tCLzZ5E/edit)  | Every query a user enters into the search bar        | Predictive search bar (navbar)       | Live             |
+| **Bumper vs Qapter Orders**   | [`1q9wOo_a…RZtzs`](https://docs.google.com/spreadsheets/d/1q9wOo_auNVkI300La_nJsALyKGRqLaM5uD44pkRZtzs/edit)  | VINs decoded by Bumper.com, for accuracy auditing    | —                                    | **Discontinued** |
 
 ## Vehicle Lookup Logs
 
@@ -88,9 +88,7 @@ that web app, and the script appends a row. Because the script is bound to the
 sheet, **each sheet's logging logic is edited from that sheet** (Extensions →
 Apps Script), not from a central repo.
 
-> These bound Apps Scripts are the **live** Apps Scripts in the stack. The
-> `appsscript_*.js` files in the Finale repo are dead migration-era reference
-> code and are not used.
+> These bound Apps Scripts are the **live** Apps Scripts in the stack.
 
 ## Known Constraints & Gotchas
 

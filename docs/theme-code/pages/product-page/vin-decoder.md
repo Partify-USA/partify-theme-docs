@@ -587,10 +587,20 @@ const isVinValidWithPaintCode = await handleVinDecode(
 );
 ```
 
-**API Selection:**
+**Paint-match flag (`isBumperdotcom`):**
 
-- `isBumperdotcom = true` → Use Bumper.com API
-- `isBumperdotcom = false` → Use ChromeData API
+This flag is derived from `is_bumperdotcom_make_found` (the make being in the
+`bumperdotcom_makes_list` theme setting). Despite the name, it no longer selects
+the Bumper.com API — ChromeData decodes every VIN. Instead it controls **paint
+matching**:
+
+- `isBumperdotcom = true` → discard the ChromeData paint code and **force Match
+  Paint by VIN** (`.VIN`)
+- `isBumperdotcom = false` → use the ChromeData paint code (falls back to `.VIN`
+  only if none was decoded)
+
+See the [Paint Decode Pipeline](../../../data-and-decoding/paint-decode-pipeline.md#selection-logic)
+for the full routing.
 
 **Return Value:**
 
