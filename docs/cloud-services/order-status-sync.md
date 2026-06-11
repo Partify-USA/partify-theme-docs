@@ -230,7 +230,7 @@ Cloud Scheduler (cron)
 
 ## Related Documentation
 
-- [Google Sheets Logging](../data-and-decoding/google-sheets-logging.md) — the Open Orders sheet this service reads from
+- [Google Sheets Logging](../data-and-decoding/google-sheets-logging.md) — the Order Status Tracker search log fed by this page
 - [Cloud Services Overview](overview.md)
 
 ## Owner & Maintenance
