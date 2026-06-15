@@ -149,7 +149,7 @@ Storefront form ─► POST createCustomerProfile
 ## Related Pages
 
 - [Cloud Services Overview](overview.md)
-- [Secrets](../github/secrets.md)
+- [Secrets](secrets.md)
 
 ## Owner & Maintenance
 

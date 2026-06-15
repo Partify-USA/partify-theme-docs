@@ -114,7 +114,7 @@ Account area ─► POST getCustomerAccountInfo { customerId }
 
 - [Update Customer Account Info](update-customer-account-info.md) (the write side)
 - [Cloud Services Overview](overview.md)
-- [Secrets](../github/secrets.md)
+- [Secrets](secrets.md)
 
 ## Owner & Maintenance
 

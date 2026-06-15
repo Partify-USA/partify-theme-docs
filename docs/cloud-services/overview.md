@@ -131,7 +131,8 @@ GCP project, and are surfaced to the container either as **mounted files** or as
 | `customer-account-data` | `customer-account-data-shopify-{client-id,client-secret,admin-access-token}` | env vars |
 | `update-customer-account-info` | `update-customer-account-info-shopify-{client-id,client-secret,admin-access-token}` | env vars |
 
-The full secret-name registry across repos and services is documented under
+The full secret-name registry for the Cloud Run services is documented under
+[Secrets](secrets.md); the secrets consumed by GitHub Actions (CI/CD) live under
 [GitHub → Secrets](../github/secrets.md).
 
 ## Shared Conventions

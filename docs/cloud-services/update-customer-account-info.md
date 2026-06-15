@@ -115,7 +115,7 @@ Garage save ─► POST updateCustomerGarageData { customerId, garageData }
 
 - [Customer Account Data](customer-account-data.md) (the read side)
 - [Cloud Services Overview](overview.md)
-- [Secrets](../github/secrets.md)
+- [Secrets](secrets.md)
 
 ## Owner & Maintenance
 
