@@ -17,6 +17,12 @@ production across the Partify repos.
 | --- | --- | --- | --- |
 | `order-tracking-api` | `deploy.yml` | push to `main` | Build + deploy `sql-order-status-tracking-sheets` to Cloud Run |
 | `adamsearch-fitment-proxy` | `deploy.yml` | push to `main` | Build + deploy `fitment-proxy-us` and `fitment-proxy-ca` to Cloud Run |
+| `garage-vin-service-node` | `deploy.yml` | push to `main` | Build + deploy `garage-vin-service-node` to Cloud Run (project `ontime-eta`) |
+| `license-to-vin` | `deploy.yml` | push to `main` | Build + deploy `license-to-vin` to Cloud Run (project `bumper-license-to-vin`) |
+| `bumperdotcom-api` | `deploy.yml` | push to `main` | Build + deploy `bumperdotcom-api` to Cloud Run (project `bumperdotcom-api`) |
+| `tax-exemption-signup` | `deploy.yml` | push to `main` | Build + deploy `tax-exemption-signup` to Cloud Run |
+| `customer-account-data` | `deploy.yml` | push to `main` | Build + deploy `customer-account-data` to Cloud Run (project `customer-account-info`) |
+| `update-customer-account-info` | `deploy.yml` | push to `main` | Build + deploy `update-customer-account-info` to Cloud Run |
 | `partify-theme-docs` | `deploy.yml` | push to `main`, manual | Build Docusaurus + publish to `gh-pages` |
 | `partify-theme` | `sync-deploy-branches.yml` | push to `main` | Cherry-pick `main` → `main-usa`/`main-ca` (allowlisted files) |
 | `partify-theme` | `notify-theme-editor-changes.yml` | push to `main-usa`/`main-ca` | Slack alert when the Shopify theme editor (`shopify[bot]`) edits a deploy branch |
@@ -26,7 +32,8 @@ production across the Partify repos.
 
 ## Cloud Run deploys (GitHub Actions)
 
-`order-tracking-api` and `adamsearch-fitment-proxy` share the same pattern:
+`order-tracking-api`, `adamsearch-fitment-proxy`, and the six
+storefront-supporting repos share the same pattern:
 
 1. Authenticate to GCP via **Workload Identity Federation** (no static
    service-account key stored in GitHub).
@@ -38,6 +45,16 @@ production across the Partify repos.
 - `adamsearch-fitment-proxy` → `fitment-proxy-us` **and** `fitment-proxy-ca`
   (project `partify-fitment-proxy`, region `us-central1`), each with its own
   store env vars and secrets.
+- **Storefront-supporting repos** (each its own GCP project, region `us-east5`,
+  `functions-framework` HTTP function, Secret Manager secrets injected as env
+  vars): `garage-vin-service-node` (`ontime-eta`), `license-to-vin`
+  (`bumper-license-to-vin`), `bumperdotcom-api` (`bumperdotcom-api`),
+  `tax-exemption-signup` (`tax-exemption-signup`), `customer-account-data`
+  (`customer-account-info`), `update-customer-account-info`
+  (`update-customer-account-info`). The workflow runtime flags (cpu, memory,
+  scaling, service account, auth posture) are set explicitly to match each
+  service's original console-deployed configuration. See the
+  [Cloud Services Overview](../cloud-services/overview.md) for per-service detail.
 
 `finale-webhooks` has **no** workflow: it deploys through a Cloud Run **source
 deploy / Cloud Build trigger** configured in the GCP console, on push to `main`.
@@ -102,4 +119,4 @@ limit. Uses `CLAUDE_CODE_OAUTH_TOKEN`.
 ## Owner & Maintenance
 
 - **Owner:** Cloud / Backend
-- **Last Updated:** 2026-06-10
+- **Last Updated:** 2026-06-15

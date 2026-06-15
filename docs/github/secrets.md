@@ -24,9 +24,12 @@ vault.
 | `SLACK_WEBHOOK_URL` | `partify-theme` (sync, editor-notify) | Posts manual-sync / conflict / theme-editor alerts to Slack |
 | `CLAUDE_CODE_OAUTH_TOKEN` | `partify-theme` (`claude-review.yml`) | Auth for the Claude PR review action |
 
-`order-tracking-api` and `adamsearch-fitment-proxy` authenticate to GCP via
-**Workload Identity Federation** (a `workload_identity_provider` + `service_account`
-in the workflow) — there is **no** long-lived GCP key stored as a GitHub secret.
+`order-tracking-api`, `adamsearch-fitment-proxy`, and the six
+storefront-supporting repos (`garage-vin-service-node`, `license-to-vin`,
+`bumperdotcom-api`, `tax-exemption-signup`, `customer-account-data`,
+`update-customer-account-info`) authenticate to GCP via **Workload Identity
+Federation** (a `workload_identity_provider` + `service_account` in each
+workflow) — there is **no** long-lived GCP key stored as a GitHub secret.
 
 ## Google Secret Manager (Cloud Run)
 
@@ -40,6 +43,12 @@ env vars.
 | `SHOPIFY_TOKEN_US`, `SHOPIFY_TOKEN_CA` | order-status | env vars |
 | `fitment-proxy-us-admin-token`, `fitment-proxy-ca-admin-token` | fitment proxy (`partify-fitment-proxy`) | env var `SHOPIFY_ADMIN_TOKEN` |
 | `fitment-proxy-us-refresh-secret`, `fitment-proxy-ca-refresh-secret` | fitment proxy | env var `REFRESH_SECRET` |
+| `garage-vin-shopify-admin-token`, `garage-vin-chromedata-app-id`, `garage-vin-chromedata-shared-secret` | garage-vin-service-node (`ontime-eta`) | env vars `SHOPIFY_ADMIN_TOKEN`, `CHROMEDATA_APP_ID`, `CHROMEDATA_SHARED_SECRET` |
+| `license-to-vin-bumper-api-key` | license-to-vin (`bumper-license-to-vin`) | env var `BUMPER_API_KEY` |
+| `bumperdotcom-api-bumper-api-key` | bumperdotcom-api (`bumperdotcom-api`) | env var `BUMPER_API_KEY` |
+| `tax-exemption-signup-shopify-admin-token` | tax-exemption-signup (`tax-exemption-signup`) | env var `SHOPIFY_ADMIN_TOKEN` |
+| `customer-account-data-shopify-client-id`, `…-shopify-client-secret`, `…-shopify-admin-access-token` | customer-account-data (`customer-account-info`) | env vars |
+| `update-customer-account-info-shopify-client-id`, `…-shopify-client-secret`, `…-shopify-admin-access-token` | update-customer-account-info (`update-customer-account-info`) | env vars |
 
 ## Finale Webhooks env (project `finale-jobs`)
 
@@ -58,11 +67,11 @@ Redo per-tenant store IDs/secrets, and `SLACK_WEBHOOK_URL`.
 
 ## Open Questions (to confirm)
 
-- Any secrets used by the unconfirmed `us-east5` storefront services
-  (`garage-vin-service-node`, `bumperdotcom-api`, etc.).
 - Whether the two flagged committed secrets have been rotated (fitment
   `REFRESH_SECRET` in `test.http`; ChromeData secret in the `chromedata-lookup`
-  client bundle).
+  client bundle). Note the ChromeData secret is now also held server-side in
+  Secret Manager (`garage-vin-chromedata-shared-secret`) for
+  `garage-vin-service-node`.
 
 ## Related Pages
 
@@ -72,4 +81,4 @@ Redo per-tenant store IDs/secrets, and `SLACK_WEBHOOK_URL`.
 ## Owner & Maintenance
 
 - **Owner:** Cloud / Backend
-- **Last Updated:** 2026-06-10
+- **Last Updated:** 2026-06-15

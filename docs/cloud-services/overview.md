@@ -23,33 +23,42 @@ and how it deploys. Read this first, then dive into the per-service pages.
 > The repo folder `adamsearch_proxy` builds and deploys services named
 > `fitment-proxy`. "AdamSearch" and "Fitment Proxy" refer to the same system.
 
-## Storefront-Supporting Services (source not in this monorepo)
+## Storefront-Supporting Services (`us-east5`)
 
 The storefront theme calls several additional Cloud Run services directly (URLs
-hardcoded in `assets/global-library.js`). Their **source repos are not in this
-monorepo** — they are known only by their deployed URLs and behavior. Locating
-and documenting their repos is an open task.
+hardcoded in `assets/global-library.js`). Each lives in its own GitHub repo,
+checked out under `google_cloud/<folder>` in the monorepo workspace, and deploys
+the same way as the fitment proxy — **GitHub Actions → Workload Identity
+Federation → Artifact Registry → Cloud Run** on push to `main`. All are
+`functions-framework` HTTP functions in `us-east5`, one GCP project each.
 
-| Service (region `us-east5`) | Purpose | Console |
-| --- | --- | --- |
-| `garage-vin-service-node` | ChromeData (JD Power VSS) VIN decode — see [Paint Decode Pipeline](../data-and-decoding/paint-decode-pipeline.md) | [Cloud Run](https://console.cloud.google.com/run/detail/us-east5/garage-vin-service-node/metrics?project=740168228309) |
-| `bumperdotcom-api` | Bumper.com VIN decode | [Cloud Run](https://console.cloud.google.com/run/detail/us-east5/bumperdotcom-api/metrics?project=345230973812) |
-| `license-to-vin` | License plate → VIN lookup | [Cloud Run](https://console.cloud.google.com/run/detail/us-east5/license-to-vin/metrics?project=273472976974) |
-| `tax-exemption-signup` | Creates a tax-exemption customer profile | [Cloud Run](https://console.cloud.google.com/run/detail/us-east5/tax-exemption-signup/metrics?project=505215902673) |
-| `customer-account-data` | Reads customer account data | [Cloud Run](https://console.cloud.google.com/run/detail/us-east5/customer-account-data/metrics?project=725897343962) |
-| `update-customer-account-info` | Updates customer account info | [Cloud Run](https://console.cloud.google.com/run/detail/us-east5/update-customer-account-info/metrics?project=49754682551) |
+| Service | Repo / folder | What it does | GCP project (number) | Entry point |
+| --- | --- | --- | --- | --- |
+| `garage-vin-service-node` | [`garage-vin-service-node`](https://github.com/Partify-USA/garage-vin-service-node) | ChromeData (JD Power VSS) VIN decode — vehicle data **and** paint, see [Paint Decode Pipeline](../data-and-decoding/paint-decode-pipeline.md) | `ontime-eta` (`740168228309`) | `fetchVehicleData` |
+| `license-to-vin` | [`license-to-vin`](https://github.com/Partify-USA/license-to-vin) | License plate → VIN via Bumper.com (the only live Bumper use) | `bumper-license-to-vin` (`273472976974`) | `fetchBumperLicenseToVin` |
+| `bumperdotcom-api` | [`bumperdotcom-api`](https://github.com/Partify-USA/bumperdotcom-api) | Bumper.com paint-code lookup by VIN — **deployed but not currently called** by the theme (`fetchFromBumper` is commented out) | `bumperdotcom-api` (`345230973812`) | `fetchBumperPaintCodes` |
+| `tax-exemption-signup` | [`tax-exemption-signup`](https://github.com/Partify-USA/tax-exemption-signup) | Creates a B2B company + tax-exempt customer profile — see [Tax-Exemption Signup](tax-exemption-signup.md) | `tax-exemption-signup` (`505215902673`) | `createCustomerProfile` |
+| `customer-account-data` | [`customer-account-data`](https://github.com/Partify-USA/customer-account-data) | Reads order history + garage metafield — see [Customer Account Data](customer-account-data.md) | `customer-account-info` (`725897343962`) | `getCustomerAccountInfo` |
+| `update-customer-account-info` | [`update-customer-account-info`](https://github.com/Partify-USA/update-customer-account-info) | Writes the garage metafield — see [Update Customer Account Info](update-customer-account-info.md) | `update-customer-account-info` (`49754682551`) | `updateCustomerGarageData` |
 
-> These are confirmed to exist (the theme calls them in production) but are not
-> yet fully documented. The console links use each service's GCP **project
-> number** (taken from its `*.run.app` URL); they resolve fine but show numbers
-> rather than project IDs. Treat this list as the starting inventory for tracking
-> down their repos and deploy pipelines.
+> **Repo folder vs. service name.** The theme's hardcoded URLs use each service's
+> GCP **project number** (e.g.
+> `garage-vin-service-node-740168228309.us-east5.run.app`); the project IDs above
+> resolve to the same services. `garage-vin-service-node` runs in project
+> `ontime-eta` (shared with order-status infrastructure), not a project of its own
+> name.
 
 ## Per-service docs
 
 - [Finale Webhooks — Architecture](finale-webhooks/finale-webhooks.md) · [Setup](finale-webhooks/finale-webhooks-setup.md) · [Adding Endpoints](finale-webhooks/finale-webhooks-endpoints.md)
 - [Order Status Production Sync](order-status-sync.md)
 - [Fitment Proxy](fitment-proxy.md)
+- [Tax-Exemption Signup](tax-exemption-signup.md)
+- [Customer Account Data (read)](customer-account-data.md) · [Update Customer Account Info (write)](update-customer-account-info.md)
+
+> Paint-decode services (`garage-vin-service-node`, `license-to-vin`, the dormant
+> `bumperdotcom-api`) are documented from the storefront's side on the
+> [Paint Decode Pipeline](../data-and-decoding/paint-decode-pipeline.md) page.
 
 ## Triggers
 
@@ -61,6 +70,9 @@ and documenting their repos is an open task.
 | `sql-order-status-tracking-sheets` — `GET /run-job` | Cloud Scheduler (job `sql-order-status-sync-sheets`) |
 | `fitment-proxy-*` — `/ymm-*` | Storefront (browser) requests |
 | `fitment-proxy-*` — `/internal/refresh` | Cloud Scheduler every 10 min (jobs `fitment-proxy-us-refresh` / `fitment-proxy-ca-refresh`) |
+| `garage-vin-service-node` / `license-to-vin` / `bumperdotcom-api` | Storefront (browser) — VIN / plate decode from `global-library.js` |
+| `getCustomerAccountInfo` / `updateCustomerGarageData` | Storefront customer-account area (browser), US store |
+| `createCustomerProfile` | Storefront tax-exemption form (browser), US store |
 
 ## Deploy Model
 
@@ -70,10 +82,14 @@ Two patterns are in use:
    on its repo triggers a Cloud Build that builds from the `Dockerfile` and
    deploys a new Cloud Run revision. There is no GitHub Actions workflow in that
    repo.
-2. **GitHub Actions → Artifact Registry → Cloud Run** — `order-tracking-api`
-   and the fitment proxy. The workflow authenticates to GCP via **Workload
-   Identity Federation** (no long-lived service-account key in GitHub), builds
-   and pushes a Docker image to Artifact Registry, then runs `gcloud run deploy`.
+2. **GitHub Actions → Artifact Registry → Cloud Run** — everything else:
+   `order-tracking-api`, the fitment proxy, and the six storefront-supporting
+   repos (`garage-vin-service-node`, `license-to-vin`, `bumperdotcom-api`,
+   `tax-exemption-signup`, `customer-account-data`,
+   `update-customer-account-info`). Each workflow authenticates to GCP via
+   **Workload Identity Federation** (no long-lived service-account key in
+   GitHub), builds and pushes a Docker image to Artifact Registry, then runs
+   `gcloud run deploy`.
 
 ```
 GitHub push to main
@@ -81,10 +97,17 @@ GitHub push to main
    ├─ finale-webhooks ──────────► Cloud Build trigger ──► Cloud Run revision
    │
    └─ order-tracking-api ───┐
-      fitment proxy ────────┴────► GitHub Action (WIF auth)
-                                    └─ docker build → Artifact Registry
-                                       └─ gcloud run deploy → Cloud Run revision
+      fitment proxy ────────┤
+      garage-vin-service ───┤
+      license-to-vin ───────┤──► GitHub Action (WIF auth)
+      bumperdotcom-api ─────┤     └─ docker build → Artifact Registry
+      tax-exemption-signup ─┤        └─ gcloud run deploy → Cloud Run revision
+      customer-account-* ───┘
 ```
+
+> All six storefront-supporting repos were previously **source/console deploys**
+> (no CI). They have since been put under this GitHub Actions + WIF pipeline; see
+> the `onboard-cloud-run-function` skill that codified the pattern.
 
 A failed build does not affect the live service — Cloud Run only routes traffic
 to a new revision after it passes startup.
@@ -101,6 +124,12 @@ GCP project, and are surfaced to the container either as **mounted files** or as
 | `finale-webhooks` | Finale US/CA keys, `PARTIFY_SECRET`, DB config, Slack webhook, Google OAuth client | env vars |
 | `sql-order-status-tracking-sheets` | `order-status-credentials-json`, `order-status-db-config-json`, `SHOPIFY_TOKEN_US`, `SHOPIFY_TOKEN_CA` | `credentials.json` + `dbConfig.json` mounted as files; tokens as env vars |
 | `fitment-proxy-*` | `fitment-proxy-{us,ca}-admin-token`, `fitment-proxy-{us,ca}-refresh-secret` | env vars (`SHOPIFY_ADMIN_TOKEN`, `REFRESH_SECRET`) |
+| `garage-vin-service-node` | `garage-vin-shopify-admin-token`, `garage-vin-chromedata-app-id`, `garage-vin-chromedata-shared-secret` | env vars |
+| `license-to-vin` | `license-to-vin-bumper-api-key` | env var `BUMPER_API_KEY` |
+| `bumperdotcom-api` | `bumperdotcom-api-bumper-api-key` | env var `BUMPER_API_KEY` |
+| `tax-exemption-signup` | `tax-exemption-signup-shopify-admin-token` | env var `SHOPIFY_ADMIN_TOKEN` |
+| `customer-account-data` | `customer-account-data-shopify-{client-id,client-secret,admin-access-token}` | env vars |
+| `update-customer-account-info` | `update-customer-account-info-shopify-{client-id,client-secret,admin-access-token}` | env vars |
 
 The full secret-name registry across repos and services is documented under
 [GitHub → Secrets](../github/secrets.md).
@@ -127,4 +156,4 @@ The full secret-name registry across repos and services is documented under
 ## Owner & Maintenance
 
 - **Owner:** Cloud / Backend
-- **Last Updated:** 2026-06-10
+- **Last Updated:** 2026-06-15

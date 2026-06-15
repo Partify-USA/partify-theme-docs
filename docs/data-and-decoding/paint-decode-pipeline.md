@@ -33,20 +33,25 @@ browser.
 
 The theme calls these services directly (URLs hardcoded in `assets/global-library.js`):
 
-| Provider / Service | Service URL | Used for | Status |
+| Provider / Service (repo) | Service URL | Used for | Status |
 | --- | --- | --- | --- |
-| **ChromeData** (`garage-vin-service-node`) | `garage-vin-service-node-740168228309.us-east5.run.app/fetchVehicleData` (POST `{ vin, state, plate, location }`) | Vehicle data (year, make, model, submodel, engine) **and** paint codes | **Live — the decode source** |
-| **Bumper.com — plate → VIN** (`license-to-vin`) | `license-to-vin-273472976974.us-east5.run.app/license-to-vin?state=…&plate=…` (GET) | License plate → VIN **only** | **Live** (the only Bumper.com use) |
-| Bumper.com — paint (`bumperdotcom-api`) | `bumperdotcom-api-345230973812.us-east5.run.app/bumperdotcom-api?vin=…` (GET) | Formerly: paint code for certain makes | **Disabled** — `fetchFromBumper()` is commented out in the theme |
+| **ChromeData** ([`garage-vin-service-node`](https://github.com/Partify-USA/garage-vin-service-node)) | `garage-vin-service-node-740168228309.us-east5.run.app/fetchVehicleData` (POST `{ vin, state, plate, location }`) | Vehicle data (year, make, model, submodel, engine) **and** paint codes | **Live — the decode source** |
+| **Bumper.com — plate → VIN** ([`license-to-vin`](https://github.com/Partify-USA/license-to-vin)) | `license-to-vin-273472976974.us-east5.run.app/license-to-vin?state=…&plate=…` (GET) | License plate → VIN **only** | **Live** (the only Bumper.com use) |
+| Bumper.com — paint ([`bumperdotcom-api`](https://github.com/Partify-USA/bumperdotcom-api)) | `bumperdotcom-api-345230973812.us-east5.run.app/bumperdotcom-api?vin=…` (GET) | Formerly: paint code for certain makes | **Deployed but unused** — the service is live, but the theme's `fetchFromBumper()` is commented out |
 
 > Both Bumper services are Bumper.com, but only the plate→VIN one is in use. The
 > paint endpoint (`bumperdotcom-api`) is dormant — the calling code is commented
 > out and gated on "more bumper credits."
 
-> ⚠️ **Source repos for these services are not in the monorepo.** They are
-> deployed Cloud Run services (project numbers in the URLs) whose source lives
-> elsewhere. Locating those repos is an open question (below). They belong on the
-> [Cloud Services Overview](../cloud-services/overview.md) once confirmed.
+> **Source repos** now live in the monorepo workspace under `google_cloud/`:
+> [`garage-vin-service-node`](https://github.com/Partify-USA/garage-vin-service-node)
+> (project `ontime-eta`),
+> [`license-to-vin`](https://github.com/Partify-USA/license-to-vin) (project
+> `bumper-license-to-vin`), and
+> [`bumperdotcom-api`](https://github.com/Partify-USA/bumperdotcom-api) (project
+> `bumperdotcom-api`). Each is its own GitHub repo that deploys via GitHub Actions
+> + Workload Identity Federation — see the
+> [Cloud Services Overview](../cloud-services/overview.md).
 
 ## Selection Logic
 
@@ -146,8 +151,6 @@ Customer input
 
 ## Open Questions (to confirm)
 
-- **Where do `garage-vin-service-node`, `bumperdotcom-api`, and `license-to-vin`
-  source repos live?** (Not in the monorepo.)
 - ChromeData (JD Power VSS) and Bumper.com **account/contract** details — owner,
   renewal, rate limits, and Bumper credit balance (the plate→VIN calls consume
   credits).
@@ -162,4 +165,4 @@ Customer input
 ## Owner & Maintenance
 
 - **Owner:** Cloud / Backend
-- **Last Updated:** 2026-06-10
+- **Last Updated:** 2026-06-15

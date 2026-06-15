@@ -130,19 +130,26 @@ git reset --hard origin/main-usa
 
 ---
 
-## Manually Syncing main to main-ca (when auto-sync fails)
+## Manually cherry-pick main to main-ca and main-usa (when auto-sync fails)
 
-When a push to `main` includes blocked files (non-allowlisted), the GitHub Action skips the entire auto-sync and sends a Slack notification. When this happens, you need to manually carry the changes to `main-ca`.
+When a push to `main` includes blocked files (non-allowlisted), the GitHub Action skips the entire auto-sync and sends a Slack notification. When this happens, you need to manually carry the changes to `main-ca` and `main-usa`.
 
-The best approach is to cherry-pick the merge commit from `main` directly onto `main-ca`. The Slack notification includes the commit SHA.
+The best approach is to cherry-pick the merge commit from `main` directly onto `main-ca` and `main-usa`. The Slack notification includes the commit SHA.
 
 > **Important:** Pushes to `main` via PR are merge commits. Cherry-picking a merge commit requires the `-m 1` flag to tell git which parent to diff against (`1` = `main`, which is always correct here).
 
-1. Make sure your local `main-ca` is up to date:
+1. Make sure your local `main-ca` and `main-usa` are up to date:
 
 ```bash
 # in your main-ca worktree
+git fetch origin
 git pull origin main-ca
+```
+
+```bash
+# in your main-usa worktree
+git fetch origin
+git pull origin main-usa
 ```
 
 2. Cherry-pick the merge commit using the SHA from the Slack notification:
@@ -152,12 +159,17 @@ git pull origin main-ca
 git cherry-pick -m 1 <commit-sha>
 ```
 
+```bash
+# in your main-usa worktree
+git cherry-pick -m 1 <commit-sha>
+```
+
 3. Git will auto-merge all allowlisted files. For blocked files (e.g. `templates/*.json`, `layout/theme.liquid`), git will attempt to auto-merge them too — but if CA has a diverged version of any of those files, you'll get a conflict that needs to be resolved manually, preserving CA-specific logic while incorporating the new feature changes.
 
 4. Once all conflicts are resolved:
 
 ```bash
-# in your main-ca worktree
+# in your main-ca or main-usa worktree
 git add .
 git cherry-pick --continue
 ```
@@ -165,15 +177,20 @@ git cherry-pick --continue
 5. Test locally with Shopify CLI before pushing:
 
 ```bash
-# in your main-ca worktree
+# in your main-ca and main-usa worktree
 shopify theme dev
 ```
 
-6. When satisfied, push to the live CA branch:
+6. When satisfied, push to the live CA or live USA branch:
 
 ```bash
 # in your main-ca worktree
 git push origin main-ca
+```
+
+```bash
+# in your main-usa worktree
+git push origin main-usa
 ```
 
 > **Why this works well:** Cherry-picking the merge commit lets git handle all the allowlisted files automatically. You only need to manually review the files that are intentionally different between stores.
