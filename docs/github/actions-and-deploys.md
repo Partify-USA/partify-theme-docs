@@ -84,6 +84,10 @@ deploy branches:
 > the allowlist + tokens prevent a change meant for one store leaking into the
 > other.
 
+> See the [Theme Git Workflow](theme-git-workflow.md) page for the hands-on side
+> of this: syncing branches before work, the commit-message tags, and how to
+> manually cherry-pick when the auto-sync is blocked.
+
 ## Theme editor back-port (`notify-theme-editor-changes.yml`)
 
 Shopify's theme editor commits directly to the connected deploy branches

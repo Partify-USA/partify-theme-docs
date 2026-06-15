@@ -1,7 +1,7 @@
 ---
 title: Secrets
 description: Registry of the secrets used across Partify GitHub Actions and Cloud Run services — names and purpose only, never values, plus where each is stored and rotated.
-sidebar_position: 3
+sidebar_position: 4
 ---
 
 # Secrets

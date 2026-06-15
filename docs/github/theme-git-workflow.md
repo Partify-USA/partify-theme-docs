@@ -1,9 +1,16 @@
 ---
 title: Theme Git Workflow
-sidebar_position: 999
+description: The hands-on branch workflow for the partify-theme repo — how main, main-usa, and main-ca relate, when changes auto-sync, and how to cherry-pick across stores and handle Shopify theme-editor commits.
+sidebar_position: 3
 ---
 
-## Partify Theme Git Workflow
+# Partify Theme Git Workflow
+
+> This is the **manual counterpart** to the automation documented on
+> [Actions & Deploys](actions-and-deploys.md): the `sync-deploy-branches.yml`,
+> theme-editor back-port, and sync-dashboard workflows handle the automatic
+> cherry-picking and Slack alerts, while this page covers the steps you perform
+> by hand around them.
 
 ## Branch Structure
 
@@ -276,3 +283,16 @@ git push origin main
 Never run `git merge main-usa` or `git merge main-ca` into `main`. The deploy branches can diverge from `main` (especially `main-ca`), and merging them back introduces that divergence into `main`, which then causes conflicts on every future auto-sync.
 
 If you need changes from a deploy branch in `main`, use cherry-pick to bring over the specific commits — never a full merge.
+
+---
+
+## Related Pages
+
+- [Actions & Deploys](actions-and-deploys.md) — the `sync-deploy-branches.yml`,
+  theme-editor notify, and sync-dashboard workflows that automate this process
+- [GitHub Overview](overview.md) · [Secrets](secrets.md)
+
+## Owner & Maintenance
+
+- **Owner:** Theme / Frontend
+- **Last Updated:** 2026-06-15
