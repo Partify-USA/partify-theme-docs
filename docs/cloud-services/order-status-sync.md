@@ -1,5 +1,5 @@
 ---
-title: Order Status Production Sync (Google Cloud Run)
+title: Order Status Production Sync (Backend Facing)
 description: Google Cloud Run service that reads open orders from Google Sheets, aggregates scan data in PostgreSQL, and pushes production status metafields directly to Shopify via the GraphQL Admin API.
 sidebar_position: 5
 ---

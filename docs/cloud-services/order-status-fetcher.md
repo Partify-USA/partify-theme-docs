@@ -1,5 +1,5 @@
 ---
-title: Order Status Fetcher (Google Cloud Run)
+title: Order Status Fetcher (Customer Facing)
 description: Google Cloud Run service behind the storefront Order Status Tracker page — looks up a single order in Shopify, enriches it with AfterShip tracking, logs the search to a Google Sheet, and returns the combined result to the browser.
 sidebar_position: 6
 ---
@@ -16,10 +16,10 @@ tracking detail, logs the lookup to a Google Sheet, and returns the combined
 Shopify + AfterShip payload to the browser.
 
 > **Not the same service as [Order Status Production Sync](order-status-sync.md).**
-> The two are easy to confuse because both deal with "order status." The *Sync*
+> The two are easy to confuse because both deal with "order status." The _Sync_
 > service (`sql-order-status-tracking-sheets`, project `alpine-sentry-448804-d4`)
 > **writes** production-status metafields (prepared / painted / packaged /
-> shipped) onto orders. This *Fetcher* service (`order-status-fetcher`, project
+> shipped) onto orders. This _Fetcher_ service (`order-status-fetcher`, project
 > `order-status-tracking-447120`) **reads** an order on demand for the tracker
 > page and adds carrier tracking. The tracker page displays the metafields the
 > Sync writes, but the live lookup and search logging are done here.
@@ -89,7 +89,7 @@ calls are accepted without a storefront `Origin` header.
 - **Request `Origin` header:** decides the store — an origin containing
   `partifyusa` routes to the US store, `partify.ca` routes to the CA store, and
   `127.0.0.1` is treated as local. Any other origin is rejected with `400 Incorrect
-  origin` (and still logged).
+origin` (and still logged).
 - **Shopify Admin GraphQL API** (`2023-01`) for the resolved store
 - **AfterShip API** (`v4`) for tracking detail
 
@@ -129,12 +129,12 @@ SKU), `tags`, and `refunds`. The first edge is used as the order; no edge return
 The carrier `company` string from the first fulfillment is lowercased and mapped
 to an AfterShip courier slug:
 
-| Contains      | AfterShip slug      |
-| ------------- | ------------------- |
-| `carriers`    | `rl-carriers`       |
-| `saia`        | `saia-freight`      |
-| `roadrunner`  | `roadrunner-freight`|
-| `ups`         | `ups`               |
+| Contains     | AfterShip slug       |
+| ------------ | -------------------- |
+| `carriers`   | `rl-carriers`        |
+| `saia`       | `saia-freight`       |
+| `roadrunner` | `roadrunner-freight` |
+| `ups`        | `ups`                |
 
 If no slug can be determined, the company name is recorded in the log error so the
 mapping gap is visible.
