@@ -61,8 +61,11 @@ resolve a vehicle to paint codes (ChromeData + Bumper.com).
 ### Order Status Tracker Logs
 
 Records every time someone searches for their order on the **Order Status
-Tracker** page — see [Order Status Sync](../cloud-services/order-status-sync.md)
-for the service behind that page's data.
+Tracker** page. This sheet is written by the
+[Order Status Fetcher](../cloud-services/order-status-fetcher.md) — the service
+that handles each lookup. (The production-status metafields the page also
+displays are written separately by
+[Order Status Sync](../cloud-services/order-status-sync.md).)
 ([`15Lm5HHAfK_wacnJj5ByECL0oexARG7oScsSkxEuVqNc`](https://docs.google.com/spreadsheets/d/15Lm5HHAfK_wacnJj5ByECL0oexARG7oScsSkxEuVqNc/edit))
 
 ### Search Bar Queries
@@ -112,6 +115,7 @@ Apps Script), not from a central repo.
 ## Related Pages
 
 - [Paint Decode Pipeline](paint-decode-pipeline.md)
+- [Order Status Fetcher](../cloud-services/order-status-fetcher.md) — writes the Order Status Tracker Logs sheet
 - [Order Status Production Sync](../cloud-services/order-status-sync.md)
 - [Predictive Search Bar](../theme-code/global-components/navbar/predictive_searchbar.md)
 

@@ -1,7 +1,7 @@
 ---
 title: Customer Account Data (read)
 description: Cloud Run service that reads a customer's order history and saved garage (custom.garage_data metafield) from Shopify for the customer-account area of the US storefront.
-sidebar_position: 8
+sidebar_position: 9
 ---
 
 # Customer Account Data (read)

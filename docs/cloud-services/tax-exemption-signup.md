@@ -1,7 +1,7 @@
 ---
 title: Tax-Exemption Signup
 description: Cloud Run service that turns a storefront tax-exemption application into a Shopify B2B company, customer contact, tax settings, and the uploaded exemption certificate — US store only.
-sidebar_position: 7
+sidebar_position: 8
 ---
 
 # Tax-Exemption Signup

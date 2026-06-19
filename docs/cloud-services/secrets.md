@@ -1,7 +1,7 @@
 ---
 title: Secrets
 description: Registry of the secrets the Partify Cloud Run services rely on — Google Secret Manager entries and the Finale Webhooks env — names and purpose only, never values, plus where each is stored and rotated.
-sidebar_position: 10
+sidebar_position: 11
 ---
 
 # Secrets
@@ -35,6 +35,7 @@ env vars.
 | `tax-exemption-signup-shopify-admin-token` | tax-exemption-signup (`tax-exemption-signup`) | env var `SHOPIFY_ADMIN_TOKEN` |
 | `customer-account-data-shopify-client-id`, `…-shopify-client-secret`, `…-shopify-admin-access-token` | customer-account-data (`customer-account-info`) | env vars |
 | `update-customer-account-info-shopify-client-id`, `…-shopify-client-secret`, `…-shopify-admin-access-token` | update-customer-account-info (`update-customer-account-info`) | env vars |
+| `order-status-fetcher-shopify-admin-token-usa`, `…-token-ca`, `order-status-fetcher-aftership-api-key` | order-status-fetcher (`order-status-tracking-447120`) | env vars `SHOPIFY_ADMIN_TOKEN_USA`, `SHOPIFY_ADMIN_TOKEN_CA`, `AFTERSHIP_API_KEY` |
 
 ## Finale Webhooks env (project `finale-jobs`)
 

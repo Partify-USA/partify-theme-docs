@@ -230,7 +230,8 @@ Cloud Scheduler (cron)
 
 ## Related Documentation
 
-- [Google Sheets Logging](../data-and-decoding/google-sheets-logging.md) — the Order Status Tracker search log fed by this page
+- [Order Status Fetcher](order-status-fetcher.md) — the storefront-facing lookup service; the production-status metafields this Sync writes are displayed on the tracker page it serves
+- [Google Sheets Logging](../data-and-decoding/google-sheets-logging.md) — the Order Status Tracker search log (written by the Fetcher, not this service)
 - [Cloud Services Overview](overview.md)
 
 ## Owner & Maintenance

@@ -1,7 +1,7 @@
 ---
 title: Adamsearch Fitment Proxy
 description: Cloud Run service that caches Year-Make-Model (YMM) fitment data from a Shopify metaobject and serves it to the storefronts for vehicle selection / garage search.
-sidebar_position: 6
+sidebar_position: 7
 ---
 
 # Fitment Proxy

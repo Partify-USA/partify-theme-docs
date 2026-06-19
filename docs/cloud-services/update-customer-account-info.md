@@ -1,7 +1,7 @@
 ---
 title: Update Customer Account Info (write)
 description: Cloud Run service that writes a customer's saved garage (custom.garage_data metafield) back to Shopify for the customer-account area of the US storefront.
-sidebar_position: 9
+sidebar_position: 10
 ---
 
 # Update Customer Account Info (write)

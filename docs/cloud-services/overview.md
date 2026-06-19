@@ -40,6 +40,7 @@ Federation → Artifact Registry → Cloud Run** on push to `main`. All are
 | `tax-exemption-signup` | [`tax-exemption-signup`](https://github.com/Partify-USA/tax-exemption-signup) | Creates a B2B company + tax-exempt customer profile — see [Tax-Exemption Signup](tax-exemption-signup.md) | `tax-exemption-signup` (`505215902673`) | `createCustomerProfile` |
 | `customer-account-data` | [`customer-account-data`](https://github.com/Partify-USA/customer-account-data) | Reads order history + garage metafield — see [Customer Account Data](customer-account-data.md) | `customer-account-info` (`725897343962`) | `getCustomerAccountInfo` |
 | `update-customer-account-info` | [`update-customer-account-info`](https://github.com/Partify-USA/update-customer-account-info) | Writes the garage metafield — see [Update Customer Account Info](update-customer-account-info.md) | `update-customer-account-info` (`49754682551`) | `updateCustomerGarageData` |
+| `order-status-fetcher` | [`order-status-fetcher`](https://github.com/Partify-USA/order-status-fetcher) | Powers the Order Status Tracker page — looks up an order in Shopify, adds AfterShip tracking, logs the search — see [Order Status Fetcher](order-status-fetcher.md) | `order-status-tracking-447120` (`770424631875`) | `fetchOrderStatusMetafields` |
 
 > **Repo folder vs. service name.** The theme's hardcoded URLs use each service's
 > GCP **project number** (e.g.
@@ -55,6 +56,7 @@ Federation → Artifact Registry → Cloud Run** on push to `main`. All are
 - [Fitment Proxy](fitment-proxy.md)
 - [Tax-Exemption Signup](tax-exemption-signup.md)
 - [Customer Account Data (read)](customer-account-data.md) · [Update Customer Account Info (write)](update-customer-account-info.md)
+- [Order Status Fetcher](order-status-fetcher.md)
 
 > Paint-decode services (`garage-vin-service-node`, `license-to-vin`, the dormant
 > `bumperdotcom-api`) are documented from the storefront's side on the
@@ -73,6 +75,7 @@ Federation → Artifact Registry → Cloud Run** on push to `main`. All are
 | `garage-vin-service-node` / `license-to-vin` / `bumperdotcom-api` | Storefront (browser) — VIN / plate decode from `global-library.js` |
 | `getCustomerAccountInfo` / `updateCustomerGarageData` | Storefront customer-account area (browser), US store |
 | `createCustomerProfile` | Storefront tax-exemption form (browser), US store |
+| `fetchOrderStatusMetafields` | Storefront Order Status Tracker page (browser), routed by `Origin` to US or CA store |
 
 ## Deploy Model
 
@@ -130,6 +133,7 @@ GCP project, and are surfaced to the container either as **mounted files** or as
 | `tax-exemption-signup` | `tax-exemption-signup-shopify-admin-token` | env var `SHOPIFY_ADMIN_TOKEN` |
 | `customer-account-data` | `customer-account-data-shopify-{client-id,client-secret,admin-access-token}` | env vars |
 | `update-customer-account-info` | `update-customer-account-info-shopify-{client-id,client-secret,admin-access-token}` | env vars |
+| `order-status-fetcher` | `order-status-fetcher-shopify-admin-token-{usa,ca}`, `order-status-fetcher-aftership-api-key` | env vars (`SHOPIFY_ADMIN_TOKEN_USA`, `SHOPIFY_ADMIN_TOKEN_CA`, `AFTERSHIP_API_KEY`) |
 
 The full secret-name registry for the Cloud Run services is documented under
 [Secrets](secrets.md); the secrets consumed by GitHub Actions (CI/CD) live under
