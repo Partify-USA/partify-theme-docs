@@ -10,6 +10,15 @@ The Auto-Select Quality feature automatically selects the appropriate quality op
 
 **Feature Branch:** `feature/us-auto-select-single-instock-quality`
 
+:::caution Not yet on `main`
+This feature lives only on the branch `feature/us-auto-select-single-instock-quality`.
+None of the functions described below (`getInStockQualities`,
+`autoSelectSingleInStockQuality`, `initQualityAutoSelection`,
+`reevaluateQualityAutoSelection`, the `[Auto-Select]` logs) exist on `main` yet.
+Until that branch is merged, this page documents intended behavior, not what ships
+on production today.
+:::
+
 ---
 
 ## Business Logic

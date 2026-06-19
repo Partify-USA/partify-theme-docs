@@ -52,20 +52,20 @@ function formatPrice(price) {
 
 ### Benefits of This Approach
 
-- **Single Source of Truth**: Conditional logic lives in one place, not duplicated across files
-- **Maintainability**: Changes to regional logic only need to be made once
-- **Clean Codebase**: No unnecessary file duplication
+- **One condition to reason about**: Reading the region from a single global (`window.shopCurrency`) keeps the _check_ consistent everywhere
+- **Maintainability**: Regional behavior for a feature lives next to that feature, not scattered into separate per-country files
 - **Performance**: All code loads for all users (consider code splitting if this becomes a concern)
 
-### Allowlisted Files
+### Keeping Regional Logic Contained
 
-Site-specific code should only be added to designated allowlisted files. This ensures:
+There is **no automated allowlist or enforcement** in the theme — a
+`window.shopCurrency` check can technically be added anywhere, and today these
+checks are spread across many assets, sections, and snippets. By convention, keep
+regional branching in the file that already owns the feature you're changing
+rather than introducing new one-off checks elsewhere.
 
-- Code remains organized and discoverable
-- Security and compliance are maintained
-- The codebase doesn't become cluttered with scattered implementations
-
-Contact your team to determine which files are allowlisted for site-specific code in your project.
+Note that some sections re-read `{{ shop.currency }}` into a local variable
+instead of using the global. Prefer `window.shopCurrency` for consistency.
 
 ## Best Practices
 

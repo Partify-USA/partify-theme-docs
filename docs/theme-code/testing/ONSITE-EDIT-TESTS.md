@@ -18,6 +18,10 @@ The framework has three parts:
 
 The QA toggle (`assets/onsite-test-toggle.js`) renders a floating widget that lets you force any test to Control or Variant without needing Intelligems to assign you. Your selection persists in `localStorage`. The toggle has two safety guards: it only loads when `show_onsite_test_toggle` is `true` in Theme Settings, and it always suppresses itself on the live published theme via a `Shopify.theme.role` check.
 
+:::caution Toggle is currently disabled at the layout level
+Even with the Theme Setting on, the QA toggle will not render today. `layout/theme.liquid` sets `window.__onsiteTestToggleEnabled = false` inside the `show_onsite_test_toggle` block, and both the toggle and the dispatcher ignore localStorage overrides while that flag is falsy. To use the on-site QA toggle locally, flip that line to `true` in `theme.liquid` first. (The template-variant toggle has no such flag and works as documented.)
+:::
+
 ---
 
 ## Files
@@ -138,7 +142,7 @@ Edit `snippets/onsite-test-config.liquid` — add your test to the array:
 shopify theme dev
 ```
 
-1. Enable the toggle: **Theme Settings → On-Site Edit Tests → Show on-site edit test toggle → on**
+1. Enable the toggle: **Theme Settings → A/B Test Tools → On-Site Edit Tests → Show on-site edit test toggle → on**
 2. Navigate to the page your test affects
 3. The dark toggle widget should appear in the top-left
 4. Set your test to "Variant" — page reloads and your changes should be visible
@@ -149,7 +153,7 @@ shopify theme dev
 ## Deploying
 
 1. Push your branch and open a PR to `main`. GitHub Actions syncs to `main-usa` and `main-ca` on merge.
-2. Enable the toggle on the QA/preview theme only: **Theme Settings → On-Site Edit Tests → Show on-site edit test toggle → on**.
+2. Enable the toggle on the QA/preview theme only: **Theme Settings → A/B Test Tools → On-Site Edit Tests → Show on-site edit test toggle → on**.
 3. Confirm the toggle is **off** on the published live theme. The `Shopify.theme.role` safety check will also suppress it automatically.
 4. For real traffic splitting, configure the Intelligems experiment to set your `window` flag for the Variant group. The dispatcher picks it up via `onIgReady` — no polling, no race conditions.
 

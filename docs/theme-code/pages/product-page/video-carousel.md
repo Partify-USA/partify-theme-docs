@@ -4,35 +4,80 @@ sidebar_position: 2
 
 # Product Video Carousel
 
-## Adding Videos
+The product video carousel is rendered by `sections/product-video-carousel.liquid`.
+It has **two video sources**, and they are mutually exclusive:
 
-Videos can be added in two locations:
+1. **Product metafield (primary).** If the product has the metafield
+   `custom.product_video_bubbles` set, the section reads its clips and ignores
+   the section settings entirely.
+2. **Section settings (fallback).** Only when that metafield is **absent** does
+   the section fall back to the `video_1…video_7` settings configured on the
+   section in the theme editor.
 
-### 1. Product.json & product-video-carousel.liquid
+In practice, videos are managed through the metafield/metaobject path. The
+section settings exist as a per-page fallback.
 
-**Prepare the video:**
+## Preparing a video
 
-1. Compress video with HandBrake to minimize file size
-2. Upload to Shopify Content → Files
-3. Copy the CDN URL
+1. Compress the video with HandBrake to minimize file size.
+2. Upload it to Shopify **Content → Files**.
+3. Copy the CDN URL.
 
-**Add to product.json:**
+## Primary path: the Product Videos metaobject
 
-- Navigate to `templates/product.json`
-- Under `product_video_carousel_section` settings, add new video URL and title
+The `custom.product_video_bubbles` metafield is backed by the **Product Videos**
+metaobject (note: _Product Videos_, not _Product Videos Carousel_). The section
+loops `clip1` through `clip7`, pairing each clip URL with its label:
 
-**Add to schema:**
+- `clip<number>` — the Shopify CDN video URL (type: **One URL**)
+- `clip<number>_label` — the caption shown under the video (type: **One single line text**)
 
-- Open `sections/product-video-carousel.liquid`
-- In the `{% schema %}` section at the bottom, add two new fields:
+The Liquid derives the keys like this (so `clip1`, `clip2`, … and their
+`_label` counterparts):
+
+```liquid
+{% for i in (1..7) %}
+  {% assign clip_key = 'clip' | append: i %}
+  {% assign clip_key_label = clip_key | append: '_label' %}
+  ...
+{% endfor %}
+```
+
+**To add a video for a product:**
+
+1. Open the **Product Videos** metaobject and find (or create) the entry linked
+   to that product via `custom.product_video_bubbles`.
+2. Set the next available `clip<number>` to the CDN URL and `clip<number>_label`
+   to the caption.
+3. If you need more than the current number of clip fields, click **Manage
+   definition** on the metaobject and add the next `clip<number>` /
+   `clip<number>_label` pair, then bump the `(1..7)` loop in
+   `product-video-carousel.liquid` to match.
+
+The rendered item structure (same for both sources) is:
+
+```liquid
+<div class="carousel-video-item" data-video="{{ clip_url }}">
+  <video muted playsinline loop preload="metadata">
+    <source src="{{ clip_url }}" type="video/mp4">
+  </video>
+  <div class="video-title">{{ clip_label }}</div>
+</div>
+```
+
+## Fallback path: section settings
+
+If a product has **no** `custom.product_video_bubbles` metafield, the section
+renders the `video_1…video_7` / `video_1_title…video_7_title` settings instead.
+These are defined in the `{% schema %}` block at the bottom of
+`sections/product-video-carousel.liquid`:
 
 ```json
 {
   "type": "text",
   "id": "video_X",
   "label": "Video X URL",
-  "info": "Enter the Shopify CDN video URL",
-  "default": "https://cdn.shopify.com/videos/..."
+  "info": "Enter the Shopify CDN video URL"
 },
 {
   "type": "text",
@@ -42,44 +87,10 @@ Videos can be added in two locations:
 }
 ```
 
-Replace `X` with the next video number (1-howver many).
+Set these from the theme editor on the product template. Remember: any product
+that has the metafield set will ignore these settings.
 
-**Add to liquid template:**
+## Owner & Maintenance
 
-- In the same file, find the `{% else %}` block (around line 290)
-- Add the new video block before `{% endif %}`:
-
-```liquid
-{% if section.settings.video_X != blank %}
-  <div class="carousel-video-item" data-video="{{ section.settings.video_X }}">
-    <video muted playsinline loop preload="metadata">
-      <source src="{{ section.settings.video_X }}" type="video/mp4">
-    </video>
-    {% if section.settings.video_X_title != blank %}
-      <div class="video-title">{{ section.settings.video_X_title }}</div>
-    {% endif %}
-  </div>
-{% endif %}
-```
-
-**Update for loop:**
-
-- Find `{% for i in (1..6) %}` (around line 274)
-- Increment the range to match total videos: `{% for i in (1..7) %}`
-
-### 2. Product Videos Metaobject
-
-**Update definition:**
-
-1. Navigate to Product Videos metaobject (Not Product Videos Carousel)
-2. Click "Manage definition" at top
-3. Add two new fields:
-   - `clip<number>` - Type: **One URL**
-   - `clip<number>_label` - Type: **One single line text**
-
-**Update entries:**
-
-1. Go to Front Bumper Set entry (and other entries if they exist)
-2. Add the same title and URL used in product.json
-
-Once both locations are updated, the videos will appear in the carousel.
+- **Owner:** Frontend Team
+- **Last Updated:** June 19, 2026

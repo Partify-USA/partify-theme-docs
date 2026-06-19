@@ -11,7 +11,7 @@ After the refactoring that introduced `VEHICLE_SCHEMA` and object parameter patt
 
 ### 1. **Required Edit - Add to VEHICLE_SCHEMA** (1 location)
 
-Edit `assets/global-library.js` (lines 7-20) and add your new field to the `VEHICLE_SCHEMA` object:
+Edit `assets/global-library.js` (lines 10-26) and add your new field to the `VEHICLE_SCHEMA` object:
 
 ```javascript
 const VEHICLE_SCHEMA = {
@@ -23,11 +23,13 @@ const VEHICLE_SCHEMA = {
 	model: null,
 	submodel: null,
 	engine: null,
+	bodyType: null,
 	state: null,
 	plate: null,
 	decodedByBumper: null,
 	lastCollectionImage: null,
 	troublesome_format: null,
+	troublesome_description: null,
 	your_new_field: null, // ← Add your new field here
 };
 ```
@@ -72,9 +74,9 @@ updateSearchTerms({
 });
 ```
 
-#### Example: Product Page Component
+#### Example: Garage Update + Navigate
 
-In `assets/product-page-component-library.js`:
+In `assets/global-library.js`, the `updateGarageAndNavigate` flow:
 
 ```javascript
 updateGarageAndNavigate({

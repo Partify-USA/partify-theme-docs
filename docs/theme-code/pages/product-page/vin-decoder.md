@@ -141,7 +141,6 @@ User selects "Paint Code XYZ" from dropdown → System shows "after" VIN input �
 
 ```html
 <div id="paintcode-app-container">
-	<div class="two-tone-message">...</div>
 	<div id="vin-decoder-option" style="display: none">
 		{% render 'vin-decoder-input-box', instance: 'byvin' %}
 	</div>
@@ -156,7 +155,6 @@ User doesn't know paint code → Selects "Use VIN" option → System shows "byvi
 - Required input (user cannot proceed without valid VIN)
 - Performs VIN decode API call
 - Populates paint code dropdown based on response
-- Shows two-tone paint warning message
 - Handles decode failures and retries (max 3 attempts)
 
 ---
@@ -340,7 +338,15 @@ Input event fires
 ```javascript
 vinInputByInstance.addEventListener('input', async function (event) {
   const originalValue = event.target.value;
-  let vinInput = originalValue.toUpperCase();
+
+  // Normalize: strip whitespace, uppercase, strip non-alphanumeric, cap at 17
+  const caretPos = event.target.selectionStart;
+  let vinInput = originalValue.replace(/\s/g, '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+  if (vinInput.length > 17) vinInput = vinInput.slice(0, 17);
+  event.target.value = vinInput;
+  const newCaret = Math.min(caretPos, vinInput.length);
+  event.target.setSelectionRange(newCaret, newCaret);
+
   let shouldShowErrorMsg = false;
   let errorMsg = "";
 ```
@@ -358,23 +364,20 @@ if (isRetryed) {
 
 **Purpose:** Prevents users from entering more characters if they've exceeded retry limits.
 
-#### 3. Character Filtering
+#### 3. Invalid-Character Removal (I/O/Q)
+
+Normalization in step 1 already stripped whitespace and any non-alphanumeric
+characters. A second pass removes the letters **I, O, and Q**, which are never
+valid in a VIN:
 
 ```javascript
-const filteredValue = vinInput.replace(
-	/[IOQ\s:;()!@#$%^?'"&*\-_=+.`~<>{}\[\]|,\/\\]/gi,
-	"",
-);
+const filteredValue = vinInput.replace(/[IOQ]/gi, "");
 const hadInvalidChars = vinInput !== filteredValue;
-event.target.value = filteredValue;
-vinInput = filteredValue;
+if (hadInvalidChars) {
+	vinInput = filteredValue;
+	event.target.value = filteredValue;
+}
 ```
-
-**Filtered Characters:**
-
-- Letters: I, O, Q (not valid in VINs)
-- Whitespace
-- Special characters: `:;()!@#$%^?'"&*-_=+.\`~\<\>{}[]|,/\`
 
 #### 4. Fitment Validation
 
@@ -439,55 +442,55 @@ if (shouldShowErrorMsg) {
 }
 ```
 
-#### 7. Submit Button State
+#### 7. Submit Button State (three states)
+
+The submit button enables only at exactly 17 characters, and a state class is
+applied so CSS can style the empty / partial / complete cases differently:
 
 ```javascript
 if (vinSubmitBtn) {
-	vinSubmitBtn.disabled = vinInput.length !== 17;
+	const len = vinInput.length;
+	vinSubmitBtn.classList.remove('vin-submit--initial', 'vin-submit--disabled', 'vin-submit--enabled');
+	if (len === 0) {
+		vinSubmitBtn.disabled = true;
+		vinSubmitBtn.classList.add('vin-submit--initial');
+	} else if (len < 17) {
+		vinSubmitBtn.disabled = true;
+		vinSubmitBtn.classList.add('vin-submit--disabled');
+	} else {
+		vinSubmitBtn.disabled = false;
+		vinSubmitBtn.classList.add('vin-submit--enabled');
+	}
 }
 ```
 
-**Rule:** Submit button only enabled when VIN is exactly 17 characters.
+A `[data-vin-helper]` element shows live "X/17" feedback and toggles
+`aria-invalid` on the input while the VIN is incomplete.
 
 #### 8. Add to Cart Button Logic
 
+Add to Cart is gated differently per instance:
+
 ```javascript
-if (vinInput.length === 0) {
-	disableAddToCartButton();
-} else if (vinInput.length < 17) {
-	disableAddToCartButton();
-}
-
-// Special case: Paint code selected
-const isSelectPaintCodeSelected = document.getElementById(
-	"checkbox-select-paint-option",
-)?.checked;
-
-if (isSelectPaintCodeSelected) {
-	if (vinInput.length === 17) {
-		disableAddToCartButton(); // Disable until VIN submitted
-	}
-
-	if (!window.isPaintUnavailable) {
-		if (vinInput.length === 0 && !selectedVariantUnavailable) {
-			enableAddToCartButton(); // Allow checkout without VIN if paint code selected
-		} else if (vinInput.length === 17) {
-			enableAddToCartButton(); // Enable after valid VIN entered
-		}
+// For the 'after' instance, disable Add to Cart until a VIN is submitted
+if (instance === 'after') {
+	if (vinInput.length === 0 && !window.isPaintUnavailable) {
+		enableAddToCartButton();
 	} else {
-		if (vinInput.length === 17) {
-			enableAddToCartButton();
-		}
+		disableAddToCartButton(); // disable while a VIN is being typed
+	}
+} else {
+	// Other instances: disable until the VIN is complete
+	if (vinInput.length === 0) {
+		disableAddToCartButton();
+	} else if (vinInput.length < 17) {
+		disableAddToCartButton();
 	}
 }
 ```
 
-**Complex Logic:** Add to Cart availability depends on:
-
-- VIN length
-- Paint code selection state
-- Paint availability
-- Variant availability
+For the `'after'` instance the shopper can check out without a VIN (unless paint
+is unavailable); typing a partial VIN disables checkout until it's submitted.
 
 #### 9. Progress Header Update
 
@@ -609,43 +612,36 @@ for the full routing.
 
 #### 4. Success Path
 
+The success branch differs by store currency (`window.shopCurrency`):
+
 ```javascript
 if (isVinValidWithPaintCode) {
-	// Store paint code in localStorage
-	handleInsertLocalStoragePaintOption();
-
-	// Auto-check "Use stored code" option
-	const checkboxUseStoredCode = document.getElementById(
-		"checkbox-paint-code-local-storage",
-	);
-	checkboxUseStoredCode.checked = true;
-
-	// Hide prompts
-	hideGiveUsYourVinMsg();
-
-	// Mark decoder as exhausted (no more attempts needed)
-	isVinDecoderExhausted = true;
-
-	// Hide this VIN input (successful, don't need it anymore)
-	hideVinInputIfVinExist();
-
-	// Hide paint code dropdown (auto-selected)
-	hidePaintCodeWrapper();
-
-	// Enable checkout if auto-selected variant is available
-	if (autoSelectedBanned) {
+	if (window.shopCurrency !== 'USD') {
+		// CA store: store the VIN, but leave paint selection to the user
+		hideGiveUsYourVinMsg();
+		isVinDecoderExhausted = true;
+		hideVinInputIfVinExist();
 		enableAddToCartButton();
+		displayVinSubmitMessage(vinInput);
+	} else {
+		// US store: auto-apply the decoded paint code
+		handleInsertLocalStoragePaintOption();
+		document.getElementById('checkbox-paint-code-local-storage').checked = true;
+		hideGiveUsYourVinMsg();
+		isVinDecoderExhausted = true;
+		hideVinInputIfVinExist();   // hide the VIN input
+		hidePaintCodeWrapper();     // hide the paint dropdown (auto-selected)
+		if (autoSelectedBanned) {
+			enableAddToCartButton();
+		}
 	}
 }
 ```
 
-**Success Flow:**
-
-1. Paint code stored in localStorage (garage)
-2. "Use my stored paint code" radio automatically checked
-3. VIN input hidden
-4. Paint code dropdown hidden
-5. Add to Cart enabled (if variant available)
+**US success flow:** paint code stored in the garage → "Use my stored paint code"
+checked → VIN input and paint dropdown hidden → Add to Cart enabled (if the variant
+is available). **CA success flow:** the VIN is stored and checkout is enabled, but
+the shopper still picks paint manually.
 
 #### 5. Failure Path
 
@@ -719,7 +715,7 @@ if (attemptedDecodedVins.length >= decodeMaxAttempts) {
 
 ### handleVinChange()
 
-**Location:** `global-library.js` (line ~985)
+**Location:** `global-library.js` (line ~1211)
 
 **Purpose:** Rate limiting and retry prevention
 
@@ -741,7 +737,7 @@ Prevents users from continuously retrying after failed attempts by tracking stat
 
 ### handleVinDecode()
 
-**Location:** `global-library.js` (line ~2473)
+**Location:** `global-library.js` (line ~2966)
 
 **Purpose:** Core VIN decode API call and response handling
 
@@ -785,7 +781,7 @@ async function handleVinDecode(
 
 ### handleInsertLocalStoragePaintOption()
 
-**Location:** `global-library.js` (line ~2809)
+**Location:** `global-library.js` (line ~3574)
 
 **Purpose:** Manage stored VIN/paint code from garage (localStorage)
 
@@ -819,44 +815,47 @@ garage: [
 
 ### hideVinInputIfVinExist()
 
-**Location:** `product-page-component-library.js` (line ~796)
+**Location:** `product-page-component-library.js` (line ~818)
 
-**Purpose:** Hide VIN input sections when VIN already provided
+**Purpose:** Hide the VIN input once a VIN is already on file in the garage
 
 **Logic:**
 
 ```javascript
 function hideVinInputIfVinExist() {
-	// Check if VIN exists in garage/storage
-	if (hasVinOnFile) {
-		// Hide both instances
-		document
-			.getElementById("vin-decoder-after-selection")
-			?.classList.add("hidden");
-		document.getElementById("vin-decoder-option")?.classList.add("hidden");
+	const terms = window.getSearchTerms() || [];
+	const existingVIN = (terms[0]?.vin || "").trim();
 
-		// Add body class for CSS targeting
-		document.body.classList.add("has-vin-on-file");
+	// No VIN on file: clear the body class (if set), then bail
+	if (!existingVIN && document.body.classList.contains("has-vin-on-file")) {
+		document.body.classList.remove("has-vin-on-file");
+		return;
 	}
+	if (!existingVIN) return;
+
+	document.body.classList.add("has-vin-on-file");
+
+	// Pre-fill the visible VIN input and make it non-blocking
+	const vinElements = getVisibleVinDecoderElements();
+	if (vinElements?.input) {
+		vinElements.input.required = false;
+		vinElements.input.value = existingVIN.toUpperCase();
+	}
+	hideVinInputAfterSelection();
+	hideVinInputContainer();
 }
 ```
 
-**CSS Impact:**
-
-```css
-.has-vin-on-file #vin-after-paint-code-selection-byvin {
-	display: none !important;
-}
-.has-vin-on-file #vin-after-paint-code-selection-after {
-	display: none !important;
-}
-```
+The VIN on file comes from `window.getSearchTerms()[0].vin` (the garage in
+localStorage). When present, the function sets a `has-vin-on-file` class on
+`<body>` and hides the input via `hideVinInputAfterSelection()` and
+`hideVinInputContainer()`.
 
 ---
 
 ### hidePaintCodeWrapper()
 
-**Location:** `product-page-component-library.js` (line ~411)
+**Location:** `product-page-component-library.js` (line ~418)
 
 **Purpose:** Hide paint code dropdown when auto-selected
 
@@ -942,8 +941,8 @@ selectedVariantUnavailable = false; // True if variant out of stock
 autoSelectedBanned = false; // True if auto-selected variant is banned/restricted
 
 // UI state
-hasVinOnFile = false; // True if VIN in localStorage garage
-firstVehicleColor = ""; // Color from garage first vehicle
+// "VIN on file" is derived at call time from window.getSearchTerms()[0].vin —
+// it is NOT a standing global. A `has-vin-on-file` class on <body> reflects it.
 ```
 
 ### Instance-Specific Variables (IIFE Scoped)
@@ -996,14 +995,12 @@ document.getElementById('vin-decoder-option').style.display = 'block';
 ### When Both are Hidden
 
 ```javascript
-// VIN already on file in garage
-hasVinOnFile === true
+// VIN already on file in the garage (window.getSearchTerms()[0].vin)
     ↓
 document.body.classList.add('has-vin-on-file');
     ↓
-// CSS hides both instances
-.has-vin-on-file #vin-after-paint-code-selection-byvin { display: none !important; }
-.has-vin-on-file #vin-after-paint-code-selection-after { display: none !important; }
+// hideVinInputIfVinExist() then hides the inputs via
+// hideVinInputAfterSelection() and hideVinInputContainer()
 ```
 
 ---
@@ -1330,8 +1327,8 @@ The VIN decoder input box system elegantly handles two distinct user flows using
 
 ---
 
-**Document Version:** 1.0  
-**Last Updated:** December 24, 2025
+**Owner:** Frontend Team  
+**Last Updated:** June 19, 2026
 
 **Related Documentation:**
 

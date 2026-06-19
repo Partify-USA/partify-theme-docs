@@ -91,14 +91,14 @@ shopify theme dev
 
 Navigate to the relevant page type. The blue toggle should appear in the top-left. Switching variants should reload the page with the correct `?view=` param.
 
-If the toggle doesn't appear, enable it: **Theme Settings → Developer Tools → Show template variant toggle**.
+If the toggle doesn't appear, enable it: **Theme Settings → A/B Test Tools → Template Tests → Show template variant toggle**.
 
 ---
 
 ## Deploying
 
 1. Push your branch and open a PR to `main`. GitHub Actions syncs to `main-usa` and `main-ca` on merge.
-2. Enable the toggle on the QA/preview theme only: **Theme Settings → Developer Tools → Show template variant toggle → on**.
+2. Enable the toggle on the QA/preview theme only: **Theme Settings → A/B Test Tools → Template Tests → Show template variant toggle → on**.
 3. Confirm the toggle is **off** on the published live theme. The `Shopify.theme.role` safety check will also suppress it automatically if it's ever accidentally left on.
 4. For real traffic splitting, use Intelligems to route users to the `?view=` URL — the toggle is for QA only and doesn't need to be on for Intelligems to work.
 
