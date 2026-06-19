@@ -85,9 +85,9 @@ const config = {
 				respectPrefersColorScheme: true,
 			},
 			navbar: {
-				title: "Partify USA",
+				title: "Partify Docs",
 				logo: {
-					alt: "Partify USA Logo",
+					alt: "Partify Docs Logo",
 					src: "img/logo.svg",
 				},
 				items: [
@@ -130,7 +130,7 @@ const config = {
 						],
 					},
 				],
-				copyright: `Copyright © ${new Date().getFullYear()} Partify USA. All rights reserved.`,
+				copyright: `Copyright © ${new Date().getFullYear()} Partify. All rights reserved.`,
 			},
 			prism: {
 				theme: prismThemes.github,
