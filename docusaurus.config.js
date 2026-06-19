@@ -10,9 +10,9 @@ import { themes as prismThemes } from "prism-react-renderer";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-	title: "Partify USA Documentation",
+	title: "Partify Documentation",
 	tagline:
-		"Technical documentation for Partify USA theme components and features",
+		"Technical documentation for the Partify stack — storefront theme, cloud services, data pipelines, and the operations behind it",
 	favicon: "img/favicon.ico",
 
 	// Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -52,7 +52,8 @@ const config = {
 				docs: {
 					sidebarPath: "./sidebars.js",
 					// Remove this to remove the "edit this page" links.
-					editUrl: "https://github.com/partify/partify-theme-docs/tree/main/",
+					editUrl:
+						"https://github.com/Partify-USA/partify-theme-docs/tree/main/",
 				},
 				blog: {
 					showReadingTime: true,
@@ -62,7 +63,8 @@ const config = {
 					},
 					// Please change this to your repo.
 					// Remove this to remove the "edit this page" links.
-					editUrl: "https://github.com/partify/partify-theme-docs/tree/main",
+					editUrl:
+						"https://github.com/Partify-USA/partify-theme-docs/tree/main",
 					onInlineTags: "warn",
 					onInlineAuthors: "warn",
 					onUntruncatedBlogPosts: "warn",
@@ -96,7 +98,7 @@ const config = {
 						label: "Documentation",
 					},
 					{
-						href: "https://github.com/partify/partify-theme-docs",
+						href: "https://github.com/Partify-USA",
 						label: "GitHub",
 						position: "right",
 					},
@@ -123,7 +125,7 @@ const config = {
 						items: [
 							{
 								label: "GitHub",
-								href: "https://github.com/partify/partify-theme-docs",
+								href: "https://github.com/Partify-USA",
 							},
 						],
 					},

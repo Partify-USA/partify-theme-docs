@@ -4,35 +4,35 @@ import styles from "./styles.module.css";
 
 const FeatureList = [
 	{
-		title: "Theme Logic",
+		title: "Storefront & Theme",
 		Svg: require("@site/static/img/undraw_docusaurus_mountain.svg").default,
 		description: (
 			<>
-				Documentation covering Partify theme codes works — including VIN and
-				license plate flows, paint code validation, and variant selection across
-				aftermarket, CAPA, and OEM parts.
+				The Shopify Liquid theme — VIN and license-plate flows, paint-code
+				validation, fitment, and variant selection across aftermarket, CAPA, and
+				OEM parts, plus the apps and A/B and Playwright tests around them.
 			</>
 		),
 	},
 	{
-		title: "Shopify Theme Architecture",
+		title: "Cloud Services & Backend",
 		Svg: require("@site/static/img/undraw_docusaurus_tree.svg").default,
 		description: (
 			<>
-				A clear breakdown of our Shopify Liquid theme structure, data flow
-				between Liquid and JavaScript, and how critical components like
-				add-to-cart, modals, and fitment checks are wired together.
+				The Google Cloud Run services that power order automation — Finale
+				integration, order-status sync and tracking, the fitment proxy, and the
+				storefront-supporting APIs, plus how they deploy and where secrets live.
 			</>
 		),
 	},
 	{
-		title: "Powered by Partify",
+		title: "Data, Decoding & Operations",
 		Svg: require("@site/static/img/undraw_docusaurus_react.svg").default,
 		description: (
 			<>
-				Hard-earned knowledge documenting Shopify quirks, third-party app
-				integrations, known failure modes, and the edge cases unique to selling
-				custom painted auto body parts at scale.
+				The pipelines tying it together — VIN and paint decoding, Google Sheets
+				logging, GitHub workflows and deploys, and the hard-earned edge cases of
+				selling custom-painted auto body parts at scale.
 			</>
 		),
 	},
