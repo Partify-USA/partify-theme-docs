@@ -1,8 +1,8 @@
 {
-	"label": "Testing",
+	"label": "Intelligems Testing",
 	"position": 10,
 	"link": {
 		"type": "generated-index",
-		"description": "Documentation on how to set up Intelligems tests"
+		"description": "Documentation on how to set up Intelligems A/B tests (template tests and on-site edit tests)."
 	}
 }
