@@ -53,7 +53,7 @@ section. Lookups made there are logged to a single sheet (both stores):
 - **VIN Decoder Logs**
   ([`1OZl8buxoSPjU3OXTfp7Fhn4r4CmuW34DM78WFidv8cI`](https://docs.google.com/spreadsheets/d/1OZl8buxoSPjU3OXTfp7Fhn4r4CmuW34DM78WFidv8cI/edit))
 
-See the [Paint Decode Pipeline](paint-decode-pipeline.md) for how these lookups
+See the [Paint Decoding](paint-decode-pipeline.md) for how these lookups
 resolve a vehicle to paint codes (ChromeData + Bumper.com).
 
 ## Other Logs
@@ -114,7 +114,7 @@ Apps Script), not from a central repo.
 
 ## Related Pages
 
-- [Paint Decode Pipeline](paint-decode-pipeline.md)
+- [Paint Decoding](paint-decode-pipeline.md)
 - [Order Status Fetcher](../cloud-services/order-status-fetcher.md) — writes the Order Status Tracker Logs sheet
 - [Order Status Production Sync](../cloud-services/order-status-sync.md)
 - [Predictive Search Bar](../theme-code/global-components/navbar/predictive_searchbar.md)

@@ -363,7 +363,7 @@ if (isRetryed) {
 ```javascript
 const filteredValue = vinInput.replace(
 	/[IOQ\s:;()!@#$%^?'"&*\-_=+.`~<>{}\[\]|,\/\\]/gi,
-	""
+	"",
 );
 const hadInvalidChars = vinInput !== filteredValue;
 event.target.value = filteredValue;
@@ -422,10 +422,10 @@ if (shouldShowErrorMsg) {
 	if (vinErrorMsgContainer) vinErrorMsgContainer.style.display = "block";
 
 	const failedAttemptsElement = wrapper.querySelector(
-		".vin-decoder-failed-attempt"
+		".vin-decoder-failed-attempt",
 	);
 	const remainingAttemptsElement = wrapper.querySelector(
-		".vin-decoder-remaining-attempts"
+		".vin-decoder-remaining-attempts",
 	);
 	if (failedAttemptsElement || remainingAttemptsElement) {
 		failedAttemptsElement.style.display = "none";
@@ -460,7 +460,7 @@ if (vinInput.length === 0) {
 
 // Special case: Paint code selected
 const isSelectPaintCodeSelected = document.getElementById(
-	"checkbox-select-paint-option"
+	"checkbox-select-paint-option",
 )?.checked;
 
 if (isSelectPaintCodeSelected) {
@@ -583,7 +583,7 @@ const isVinValidWithPaintCode = await handleVinDecode(
 	vinDecoderFirstMsg,
 	vinDecoderEndMsg,
 	forceSelectMsgStart,
-	forceSelectMsgEnd
+	forceSelectMsgEnd,
 );
 ```
 
@@ -599,7 +599,7 @@ matching**:
 - `isBumperdotcom = false` → use the ChromeData paint code (falls back to `.VIN`
   only if none was decoded)
 
-See the [Paint Decode Pipeline](../../../data-and-decoding/paint-decode-pipeline.md#selection-logic)
+See the [Paint Decoding](../../../data-and-decoding/paint-decode-pipeline.md#selection-logic)
 for the full routing.
 
 **Return Value:**
@@ -616,7 +616,7 @@ if (isVinValidWithPaintCode) {
 
 	// Auto-check "Use stored code" option
 	const checkboxUseStoredCode = document.getElementById(
-		"checkbox-paint-code-local-storage"
+		"checkbox-paint-code-local-storage",
 	);
 	checkboxUseStoredCode.checked = true;
 
@@ -684,7 +684,7 @@ if (attemptedDecodedVins.length >= decodeMaxAttempts) {
 			"",
 			forceSelectMsgStart,
 			forceSelectMsgEnd,
-			3
+			3,
 		);
 
 		hideGiveUsYourVinMsg();
@@ -880,7 +880,10 @@ function hidePaintCodeWrapper() {
 	max-height: 0;
 	overflow: hidden;
 	opacity: 0;
-	transition: max-height 0.5s ease, opacity 0.5s ease, margin-top 0.7s ease;
+	transition:
+		max-height 0.5s ease,
+		opacity 0.5s ease,
+		margin-top 0.7s ease;
 }
 
 .paint-code-wrapper.show {
@@ -949,13 +952,13 @@ firstVehicleColor = ""; // Color from garage first vehicle
 (function () {
 	const instance = "after"; // or 'byvin'
 	const vinInputByInstance = document.getElementById(
-		`vin-decoder-textbox-for-verification-${instance}`
+		`vin-decoder-textbox-for-verification-${instance}`,
 	);
 	const wrapper = document.getElementById(
-		`vin-decoder-textbox-for-verification-wrapper-${instance}`
+		`vin-decoder-textbox-for-verification-wrapper-${instance}`,
 	);
 	const vinErrorMsgContainer = wrapper.querySelector(
-		".vin-error-message-container"
+		".vin-error-message-container",
 	);
 	const vinSubmitBtn = document.querySelector(`[data-instance="${instance}"]`);
 
@@ -1067,7 +1070,6 @@ document.body.classList.add('has-vin-on-file');
 ### Journey 1: Success on First Try ("ByVin" Instance)
 
 1. **User lands on product page**
-
    - Paint options shown
    - No VIN input visible yet
 
@@ -1082,24 +1084,20 @@ document.body.classList.add('has-vin-on-file');
    - Two-tone warning message shown
 
 3. **User types VIN: "1HGBH41JXMN109186"**
-
    - Character validation runs on each keystroke
    - Invalid chars filtered (I, O, Q, special chars)
    - Submit button remains disabled until 17 chars
 
 4. **At 17 characters**
-
    - Submit button enables
    - No validation errors shown
 
 5. **User clicks Submit**
-
    - Loading spinner appears
    - API call: `handleVinDecode("1HGBH41JXMN109186", ...)`
    - Response: Paint code "NH731P"
 
 6. **Success Processing**
-
    - Paint code "NH731P" matched to variant
    - Variant auto-selected in dropdown
    - VIN stored in garage (localStorage)
@@ -1116,23 +1114,19 @@ document.body.classList.add('has-vin-on-file');
 ### Journey 2: Failure After 3 Attempts ("ByVin" Instance)
 
 1. **User selects "Find paint code using VIN"**
-
    - ByVin instance shown
 
 2. **Attempt 1: User enters "5YJSA1E14HF250864"**
-
    - Submit → API call → No matching paint code
    - Error: "Failed attempt. You have 2 remaining attempts."
    - Submit button disabled
    - VIN cleared or disabled
 
 3. **Attempt 2: User enters "2HGFG12848H501234"**
-
    - Submit → API call → No matching paint code
    - Error: "Failed attempt. You have 1 remaining attempt."
 
 4. **Attempt 3: User enters "19UUA66258A012345"**
-
    - Submit → API call → No matching paint code
    - Error: "Unable to decode VIN after 3 attempts."
    - `isVinDecoderExhausted = true`
@@ -1158,24 +1152,20 @@ document.body.classList.add('has-vin-on-file');
 ### Journey 3: Optional VIN After Paint Selection ("After" Instance)
 
 1. **User selects "Select a paint code" radio**
-
    - Paint code dropdown shown
    - No VIN input yet
 
 2. **User selects paint code "NH731P - Silver Metallic"**
-
    - Variant selected
    - Price updates
    - Add to Cart enables
    - "After" instance VIN input appears
 
 3. **Label shows: "Provide VIN to guarantee fit (optional)"**
-
    - User CAN checkout without VIN
    - Or user CAN provide VIN for verification
 
 4. **User chooses to provide VIN**
-
    - Types: "1HGBH41JXMN109186"
    - Submit → API validates VIN matches paint code
    - Success: VIN stored, order enhanced
@@ -1226,7 +1216,7 @@ document.body.classList.add('has-vin-on-file');
 
 ```javascript
 const vinInput = document.getElementById(
-	"vin-decoder-textbox-for-verification"
+	"vin-decoder-textbox-for-verification",
 );
 // Returns only first instance, ignores second
 ```
@@ -1235,7 +1225,7 @@ const vinInput = document.getElementById(
 
 ```javascript
 const vinInput = document.getElementById(
-	`vin-decoder-textbox-for-verification-${instance}`
+	`vin-decoder-textbox-for-verification-${instance}`,
 );
 // Returns correct instance element
 ```
@@ -1262,7 +1252,7 @@ document.querySelectorAll(".vin-decoder-wrapper.show").forEach((el) => {
 ```javascript
 // Check if input has listeners
 getEventListeners(
-	document.getElementById("vin-decoder-textbox-for-verification-after")
+	document.getElementById("vin-decoder-textbox-for-verification-after"),
 );
 
 // Should show 'input' event listener
@@ -1341,11 +1331,11 @@ The VIN decoder input box system elegantly handles two distinct user flows using
 ---
 
 **Document Version:** 1.0  
-**Last Updated:** December 24, 2025  
+**Last Updated:** December 24, 2025
 
 **Related Documentation:**
 
-- [Paint Decode Pipeline](../../../data-and-decoding/paint-decode-pipeline.md) — the backend ChromeData/Bumper decode services this input box calls
+- [Paint Decoding](../../../data-and-decoding/paint-decode-pipeline.md) — the backend ChromeData/Bumper decode services this input box calls
 
 **Related Files:**
 

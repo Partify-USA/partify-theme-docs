@@ -1,10 +1,10 @@
 ---
-title: Paint Decode Pipeline
+title: Paint Decoding
 description: How a VIN (or license plate) becomes a paint code on the storefront — ChromeData decodes vehicle data and paint codes, Bumper.com is used only to turn license plates into VINs, and certain makes always fall back to Match Paint by VIN.
 sidebar_position: 2
 ---
 
-# Paint Decode Pipeline
+# Paint Decoding
 
 ## Purpose
 
@@ -24,20 +24,20 @@ browser.
 
 ## Consumers
 
-| Consumer | What it is |
-| --- | --- |
-| Storefront product page | The [VIN decoder input box](../theme-code/pages/product-page/vin-decoder.md) calls the decode services and auto-selects the paint variant |
-| Internal ChromeData lookup tool | A standalone React app (GitHub Pages) for staff to look up vehicle style data manually; logs to a sheet |
+| Consumer                        | What it is                                                                                                                                |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Storefront product page         | The [VIN decoder input box](../theme-code/pages/product-page/vin-decoder.md) calls the decode services and auto-selects the paint variant |
+| Internal ChromeData lookup tool | A standalone React app (GitHub Pages) for staff to look up vehicle style data manually; logs to a sheet                                   |
 
 ## Storefront Decode Services (Cloud Run, `us-east5`)
 
 The theme calls these services directly (URLs hardcoded in `assets/global-library.js`):
 
-| Provider / Service (repo) | Service URL | Used for | Status |
-| --- | --- | --- | --- |
-| **ChromeData** ([`garage-vin-service-node`](https://github.com/Partify-USA/garage-vin-service-node)) | `garage-vin-service-node-740168228309.us-east5.run.app/fetchVehicleData` (POST `{ vin, state, plate, location }`) | Vehicle data (year, make, model, submodel, engine) **and** paint codes | **Live — the decode source** |
-| **Bumper.com — plate → VIN** ([`license-to-vin`](https://github.com/Partify-USA/license-to-vin)) | `license-to-vin-273472976974.us-east5.run.app/license-to-vin?state=…&plate=…` (GET) | License plate → VIN **only** | **Live** (the only Bumper.com use) |
-| Bumper.com — paint ([`bumperdotcom-api`](https://github.com/Partify-USA/bumperdotcom-api)) | `bumperdotcom-api-345230973812.us-east5.run.app/bumperdotcom-api?vin=…` (GET) | Formerly: paint code for certain makes | **Deployed but unused** — the service is live, but the theme's `fetchFromBumper()` is commented out |
+| Provider / Service (repo)                                                                            | Service URL                                                                                                       | Used for                                                               | Status                                                                                              |
+| ---------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| **ChromeData** ([`garage-vin-service-node`](https://github.com/Partify-USA/garage-vin-service-node)) | `garage-vin-service-node-740168228309.us-east5.run.app/fetchVehicleData` (POST `{ vin, state, plate, location }`) | Vehicle data (year, make, model, submodel, engine) **and** paint codes | **Live — the decode source**                                                                        |
+| **Bumper.com — plate → VIN** ([`license-to-vin`](https://github.com/Partify-USA/license-to-vin))     | `license-to-vin-273472976974.us-east5.run.app/license-to-vin?state=…&plate=…` (GET)                               | License plate → VIN **only**                                           | **Live** (the only Bumper.com use)                                                                  |
+| Bumper.com — paint ([`bumperdotcom-api`](https://github.com/Partify-USA/bumperdotcom-api))           | `bumperdotcom-api-345230973812.us-east5.run.app/bumperdotcom-api?vin=…` (GET)                                     | Formerly: paint code for certain makes                                 | **Deployed but unused** — the service is live, but the theme's `fetchFromBumper()` is commented out |
 
 > Both Bumper services are Bumper.com, but only the plate→VIN one is in use. The
 > paint endpoint (`bumperdotcom-api`) is dormant — the calling code is commented
@@ -50,8 +50,9 @@ The theme calls these services directly (URLs hardcoded in `assets/global-librar
 > `bumper-license-to-vin`), and
 > [`bumperdotcom-api`](https://github.com/Partify-USA/bumperdotcom-api) (project
 > `bumperdotcom-api`). Each is its own GitHub repo that deploys via GitHub Actions
-> + Workload Identity Federation — see the
-> [Cloud Services Overview](../cloud-services/overview.md).
+>
+> - Workload Identity Federation — see the
+>   [Cloud Services Overview](../cloud-services/overview.md).
 
 ## Selection Logic
 
