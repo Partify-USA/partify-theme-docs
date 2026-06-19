@@ -3,6 +3,7 @@
 	"position": 3,
 	"link": {
 		"type": "generated-index",
+		"slug": "/category/data-and-decoding",
 		"description": "Data pipelines and lookup logic: Google Sheets logging and VIN/paint decoding (ChromeData + Bumper.com)."
 	}
 }
