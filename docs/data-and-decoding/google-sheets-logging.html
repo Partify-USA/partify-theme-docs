@@ -5,8 +5,8 @@
 <meta name="generator" content="Docusaurus v3.9.2">
 <title data-rh="true">Google Sheets Logging | Partify USA Documentation</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://Partify-USA.github.io/partify-theme-docs/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://Partify-USA.github.io/partify-theme-docs/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://Partify-USA.github.io/partify-theme-docs/docs/data-and-decoding/google-sheets-logging"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Google Sheets Logging | Partify USA Documentation"><meta data-rh="true" name="description" content="The Google Sheets used as logging sinks across Partify — vehicle lookups (Garage and VIN Decoder), order-status searches, search-bar queries, and the discontinued Bumper vs Qapter audit — each fed by an Apps Script bound to its sheet."><meta data-rh="true" property="og:description" content="The Google Sheets used as logging sinks across Partify — vehicle lookups (Garage and VIN Decoder), order-status searches, search-bar queries, and the discontinued Bumper vs Qapter audit — each fed by an Apps Script bound to its sheet."><link data-rh="true" rel="icon" href="/partify-theme-docs/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://Partify-USA.github.io/partify-theme-docs/docs/data-and-decoding/google-sheets-logging"><link data-rh="true" rel="alternate" href="https://Partify-USA.github.io/partify-theme-docs/docs/data-and-decoding/google-sheets-logging" hreflang="en"><link data-rh="true" rel="alternate" href="https://Partify-USA.github.io/partify-theme-docs/docs/data-and-decoding/google-sheets-logging" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Data & Decoding","item":"https://Partify-USA.github.io/partify-theme-docs/docs/category/data--decoding"},{"@type":"ListItem","position":2,"name":"Google Sheets Logging","item":"https://Partify-USA.github.io/partify-theme-docs/docs/data-and-decoding/google-sheets-logging"}]}</script><link rel="alternate" type="application/rss+xml" href="/partify-theme-docs/blog/rss.xml" title="Partify USA Documentation RSS Feed">
 <link rel="alternate" type="application/atom+xml" href="/partify-theme-docs/blog/atom.xml" title="Partify USA Documentation Atom Feed"><link rel="stylesheet" href="/partify-theme-docs/assets/css/styles.9072f9ea.css">
-<script src="/partify-theme-docs/assets/js/runtime~main.5f263e91.js" defer="defer"></script>
-<script src="/partify-theme-docs/assets/js/main.39afd78c.js" defer="defer"></script>
+<script src="/partify-theme-docs/assets/js/runtime~main.9a676a05.js" defer="defer"></script>
+<script src="/partify-theme-docs/assets/js/main.7454ec53.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <svg style="display: none;"><defs>
@@ -51,8 +51,11 @@ resolve a vehicle to paint codes (ChromeData + Bumper.com).</p>
 <h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="other-logs">Other Logs<a href="#other-logs" class="hash-link" aria-label="Direct link to Other Logs" title="Direct link to Other Logs" translate="no">​</a></h2>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="order-status-tracker-logs">Order Status Tracker Logs<a href="#order-status-tracker-logs" class="hash-link" aria-label="Direct link to Order Status Tracker Logs" title="Direct link to Order Status Tracker Logs" translate="no">​</a></h3>
 <p>Records every time someone searches for their order on the <strong>Order Status
-Tracker</strong> page — see <a class="" href="/partify-theme-docs/docs/cloud-services/order-status-sync">Order Status Sync</a>
-for the service behind that page&#x27;s data.
+Tracker</strong> page. This sheet is written by the
+<a class="" href="/partify-theme-docs/docs/cloud-services/order-status-fetcher">Order Status Fetcher</a> — the service
+that handles each lookup. (The production-status metafields the page also
+displays are written separately by
+<a class="" href="/partify-theme-docs/docs/cloud-services/order-status-sync">Order Status Sync</a>.)
 (<a href="https://docs.google.com/spreadsheets/d/15Lm5HHAfK_wacnJj5ByECL0oexARG7oScsSkxEuVqNc/edit" target="_blank" rel="noopener noreferrer" class=""><code>15Lm5HHAfK_wacnJj5ByECL0oexARG7oScsSkxEuVqNc</code></a>)</p>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="search-bar-queries">Search Bar Queries<a href="#search-bar-queries" class="hash-link" aria-label="Direct link to Search Bar Queries" title="Direct link to Search Bar Queries" translate="no">​</a></h3>
 <p>Logs <strong>every single thing</strong> a user enters into the search bar. The predictive
@@ -96,6 +99,7 @@ has its own column layout.</li>
 <h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="related-pages">Related Pages<a href="#related-pages" class="hash-link" aria-label="Direct link to Related Pages" title="Direct link to Related Pages" translate="no">​</a></h2>
 <ul>
 <li class=""><a class="" href="/partify-theme-docs/docs/data-and-decoding/paint-decode-pipeline">Paint Decode Pipeline</a></li>
+<li class=""><a class="" href="/partify-theme-docs/docs/cloud-services/order-status-fetcher">Order Status Fetcher</a> — writes the Order Status Tracker Logs sheet</li>
 <li class=""><a class="" href="/partify-theme-docs/docs/cloud-services/order-status-sync">Order Status Production Sync</a></li>
 <li class=""><a class="" href="/partify-theme-docs/docs/theme-code/global-components/navbar/predictive_searchbar">Predictive Search Bar</a></li>
 </ul>
